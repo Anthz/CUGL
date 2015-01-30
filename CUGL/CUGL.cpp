@@ -13,6 +13,7 @@ bool CUGL::Initialise()
 	glClearColor(0.4f, 0.6f, 0.9f, 0.0f);
 
 	shader = new Shader("Colour.vert", "Colour.frag");
+	drawableSurface = new Surface2D(Surface2D::CIRCLE, shader);
 
 	return true;
 }
@@ -21,24 +22,6 @@ void CUGL::Run()
 {
 	glEnable(GL_DEPTH);
 	glDepthFunc(GL_LESS);
-
-	float points[] = {
-		0.0f, 0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f
-	};
-
-	vbo = 0;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), &points, GL_STATIC_DRAW);
-
-	vao = 0;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
 	while(!glfwWindowShouldClose(mainWND->Handle()))
 	{
@@ -62,10 +45,9 @@ void CUGL::Update()
 void CUGL::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	shader->Bind();
-	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	shader->Unbind();
+
+	drawableSurface->Render();
+
 	glfwSwapBuffers(mainWND->Handle());
 }
 

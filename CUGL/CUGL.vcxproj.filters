@@ -16,36 +16,60 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{9bc70378-f91a-4a2d-be76-e80e1932675d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\C/C++">
+      <UniqueIdentifier>{5044934d-b135-488a-8dcd-65b6989c8b90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CUDA">
+      <UniqueIdentifier>{2bd7391d-ccdb-434c-a3cb-4a7d3b5f1122}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\C/C++">
+      <UniqueIdentifier>{dbe6272b-ab2d-4989-82e9-a0e2396bf75b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CUDA">
+      <UniqueIdentifier>{abae813c-2a8b-4677-9594-c2758171b848}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Models">
+      <UniqueIdentifier>{877ee033-822c-4887-9266-361709415881}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Utilities.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="CUGL.cpp">
+      <Filter>Source Files\C/C++</Filter>
     </ClCompile>
     <ClCompile Include="GLContext.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\C/C++</Filter>
     </ClCompile>
-    <ClCompile Include="CUGL.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\C/C++</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\C/C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Surface2D.cpp">
+      <Filter>Source Files\C/C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files\C/C++</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Utilities.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="CUGL.h">
+      <Filter>Header Files\C/C++</Filter>
     </ClInclude>
     <ClInclude Include="GLContext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CUGL.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\C/C++</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\C/C++</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface2D.h">
+      <Filter>Header Files\C/C++</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Header Files\C/C++</Filter>
+    </ClInclude>
+    <ClInclude Include="kernel.h">
+      <Filter>Header Files\CUDA</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -58,5 +82,10 @@
     <Text Include="Colour.vert">
       <Filter>Resource Files\Shaders</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu">
+      <Filter>Source Files\CUDA</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>
