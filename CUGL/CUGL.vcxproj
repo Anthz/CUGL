@@ -81,17 +81,20 @@
   <ItemGroup>
     <ClCompile Include="CUGL.cpp" />
     <ClCompile Include="GLContext.cpp" />
+    <ClCompile Include="kernel.cu">
+      <FileType>CppCode</FileType>
+    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Surface2D.cpp" />
+    <ClCompile Include="DrawableSurface.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CUGL.h" />
     <ClInclude Include="GLContext.h" />
-    <ClInclude Include="kernel.h" />
+    <ClInclude Include="Kernel.h" />
     <ClInclude Include="Shader.h" />
-    <ClInclude Include="Surface2D.h" />
+    <ClInclude Include="DrawableSurface.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
@@ -102,9 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Colour.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

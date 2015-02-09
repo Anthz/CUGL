@@ -45,11 +45,14 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\C/C++</Filter>
     </ClCompile>
-    <ClCompile Include="Surface2D.cpp">
-      <Filter>Source Files\C/C++</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities.cpp">
       <Filter>Source Files\C/C++</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawableSurface.cpp">
+      <Filter>Source Files\C/C++</Filter>
+    </ClCompile>
+    <ClCompile Include="kernel.cu">
+      <Filter>Source Files\CUDA</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,13 +65,13 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files\C/C++</Filter>
     </ClInclude>
-    <ClInclude Include="Surface2D.h">
-      <Filter>Header Files\C/C++</Filter>
-    </ClInclude>
     <ClInclude Include="Utilities.h">
       <Filter>Header Files\C/C++</Filter>
     </ClInclude>
-    <ClInclude Include="kernel.h">
+    <ClInclude Include="DrawableSurface.h">
+      <Filter>Header Files\C/C++</Filter>
+    </ClInclude>
+    <ClInclude Include="Kernel.h">
       <Filter>Header Files\CUDA</Filter>
     </ClInclude>
   </ItemGroup>
@@ -82,10 +85,5 @@
     <Text Include="Colour.vert">
       <Filter>Resource Files\Shaders</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <CudaCompile Include="kernel.cu">
-      <Filter>Source Files\CUDA</Filter>
-    </CudaCompile>
   </ItemGroup>
 </Project>

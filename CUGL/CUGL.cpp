@@ -13,7 +13,7 @@ bool CUGL::Initialise()
 	glClearColor(0.4f, 0.6f, 0.9f, 0.0f);
 
 	shader = new Shader("Colour.vert", "Colour.frag");
-	drawableSurface = new Surface2D(Surface2D::CIRCLE, shader);
+	drawableSurface = new DrawableSurface(DrawableSurface::SQUARE, shader, dim3(100, 100, 0));
 
 	return true;
 }

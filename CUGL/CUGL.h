@@ -3,7 +3,8 @@
 #include "Utilities.h"
 #include "GLContext.h"
 #include "Shader.h"
-#include "Surface2D.h"
+#include "DrawableSurface.h"
+#include "kernel.h"
 
 class CUGL
 {
@@ -26,6 +27,6 @@ private:
 	GLContext *mainWND;
 	Shader *shader;
 
-	Surface2D *drawableSurface;
+	DrawableSurface *drawableSurface;
 };
 

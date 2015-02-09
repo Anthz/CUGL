@@ -5,12 +5,27 @@
 #include <time.h>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <windows.h>
+
+#define ERRORCHECK(e) (ErrCheck(e, __FILE__, __LINE__))
+
+
 
 namespace Logger
 {
 	void InitLogger(const std::string &folderPath = "Logs");
 	void Log(const std::string &msg);
+}
+
+static void ErrCheck(cudaError_t e, const char *file, int line)
+{
+	if(e != cudaSuccess)
+	{
+		std::stringstream ss;
+		ss << "Error: " << file << "|" << line << " " << cudaGetErrorString(e);
+		Logger::Log(ss.str());
+	}
 }
 
 class CUTimer

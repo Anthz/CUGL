@@ -1,3 +1,5 @@
-//normal .h file with function declerations for kernel calls
-//public:
-//	void doKernel(float* data);
+class Kernel
+{
+public:
+	void ExecuteKernel(cudaSurfaceObject_t tex, dim3 dimentions);
+};
