@@ -51,9 +51,6 @@
     <ClCompile Include="DrawableSurface.cpp">
       <Filter>Source Files\C/C++</Filter>
     </ClCompile>
-    <ClCompile Include="kernel.cu">
-      <Filter>Source Files\CUDA</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CUGL.h">
@@ -85,5 +82,10 @@
     <Text Include="Colour.vert">
       <Filter>Resource Files\Shaders</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu">
+      <Filter>Source Files\CUDA</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

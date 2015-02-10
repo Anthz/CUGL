@@ -26,14 +26,15 @@ public:
 	void Render();
 	void MapTexture();
 
-	cudaSurfaceObject_t * Tex() const { return tex; }
+	cudaSurfaceObject_t Tex() const { return tex; }
+	dim3 Dims() const { return dims; }
 private:
 	void Initialise();
 	void GenTexture();
 
 	cudaGraphicsResource *cudaImageResource;
 	cudaArray_t texArray;
-	cudaSurfaceObject_t *tex;
+	cudaSurfaceObject_t tex;
 
 	Shape shape;
 	Shader *shader;

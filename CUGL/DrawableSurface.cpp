@@ -113,7 +113,7 @@ void DrawableSurface::Initialise()
 	glBindVertexArray(0);
 	glDeleteBuffers(1, &vbo);
 
-
+	GenTexture();
 }
 
 void DrawableSurface::GenTexture()
@@ -190,6 +190,6 @@ void DrawableSurface::MapTexture()
 	resourceDesc.res.array.array = texArray;
 
 	tex = 0;
-	cudaCreateSurfaceObject(tex, &resourceDesc);
+	cudaCreateSurfaceObject(&tex, &resourceDesc);
 }
 

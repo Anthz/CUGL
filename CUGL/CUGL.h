@@ -4,7 +4,7 @@
 #include "GLContext.h"
 #include "Shader.h"
 #include "DrawableSurface.h"
-#include "kernel.h"
+#include "Kernel.h"
 
 class CUGL
 {
