@@ -80,10 +80,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CUGL.cpp" />
+    <ClCompile Include="CUGLBuffer.cpp" />
     <ClCompile Include="GLContext.cpp" />
-    <ClCompile Include="kernel.cu">
+    <CudaCompile Include="kernel.cu">
       <FileType>CppCode</FileType>
-    </ClCompile>
+    </CudaCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="DrawableSurface.cpp" />
@@ -91,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CUGL.h" />
+    <ClInclude Include="CUGLBuffer.h" />
     <ClInclude Include="GLContext.h" />
     <ClInclude Include="Kernel.h" />
     <ClInclude Include="Shader.h" />

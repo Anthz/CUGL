@@ -51,8 +51,8 @@
     <ClCompile Include="DrawableSurface.cpp">
       <Filter>Source Files\C/C++</Filter>
     </ClCompile>
-    <ClCompile Include="kernel.cu">
-      <Filter>Source Files\CUDA</Filter>
+    <ClCompile Include="CUGLBuffer.cpp">
+      <Filter>Source Files\C/C++</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +74,9 @@
     <ClInclude Include="Kernel.h">
       <Filter>Header Files\CUDA</Filter>
     </ClInclude>
+    <ClInclude Include="CUGLBuffer.h">
+      <Filter>Header Files\C/C++</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -85,5 +88,10 @@
     <Text Include="Colour.vert">
       <Filter>Resource Files\Shaders</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu">
+      <Filter>Source Files\CUDA</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

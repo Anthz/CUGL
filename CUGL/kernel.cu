@@ -22,7 +22,7 @@ __global__ void AddKernel(cudaSurfaceObject_t tex, dim3 dimentions)
 	}
 
 	float4 element = make_float4(1.0f, 0.0f, 0.0f, 1.0f);
-	surf2Dwrite(element, tex, x * sizeof(float4), y);	//undefined in .cu file
+	//surf2Dwrite(element, tex, x * sizeof(float4), y);	//undefined in .cu file
 }
 
 // int main()
@@ -34,5 +34,5 @@ void Kernel::ExecuteKernel(cudaSurfaceObject_t tex, dim3 dimentions)
 {
 	dim3 blockDim(128, 128, 1);
 	dim3 gridDim(ceil((float)dimentions.x / (float)blockDim.x), ceil((float)dimentions.y / (float)blockDim.y), 1);
-	//AddKernel << <gridDim, blockDim >> >(tex, dimentions);
+	AddKernel << <gridDim, blockDim >> >(tex, dimentions);
 }
