@@ -13,7 +13,8 @@ CUGLBuffer::~CUGLBuffer()
 	delete[] bufferSize;
 }
 
-bool CUGLBuffer::InitVBO(int *bufferCapacity, float **bufferData, int *bufferUsage)
+bool CUGLBuffer::InitVBO(int *bufferCapacity, float **bufferData, unsigned int *bufferUsage,
+							int *bufferIndex, int *attribSize, GLenum *bufferType, bool *normalised)
 {
 	if(sizeof(*bufferCapacity) != sizeof(int) * count)
 	{
@@ -44,10 +45,21 @@ bool CUGLBuffer::InitVBO(int *bufferCapacity, float **bufferData, int *bufferUsa
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, VBO[i]);
 		glBufferData(GL_ARRAY_BUFFER, bufferCapacity[i], (GLvoid*)bufferData[i], bufferUsage[i]);
-		glVertexAttribPointer((GLuint)0,)
+		glVertexAttribPointer((GLuint)bufferIndex, attribSize[i], bufferType[i], normalised[i], 0, 0);
+		glEnableVertexAttribArray((GLuint)bufferIndex[i]);
 	}
 
 	return true;
+}
+
+GLuint *CUGLBuffer::GetVBO(int index)
+{
+	return &VBO[index];
+}
+
+GLuint *CUGLBuffer::GetAllVBO()
+{
+	return VBO;
 }
 
 
