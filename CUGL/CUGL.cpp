@@ -14,6 +14,7 @@ bool CUGL::Initialise()
 
 	shader = new Shader("Colour.vert", "Colour.frag");
 	drawableSurface = new DrawableSurface(DrawableSurface::SQUARE, shader, dim3(100, 100, 0));
+	drawableSurface->MapTexture();
 
 	return true;
 }
@@ -40,6 +41,8 @@ void CUGL::Update()
 	}
 
 	glfwPollEvents();
+
+	Kernel::ExecuteKernel(drawableSurface->Tex(), drawableSurface->Dims());
 }
 
 void CUGL::Render()

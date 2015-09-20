@@ -1,0 +1,43 @@
+[15:32:31] ###LOG START###
+[15:32:31] Renderer: GeForce GTX TITAN Z/PCIe/SSE2
+[15:32:31] OpenGL Version: 3.2.0 NVIDIA 347.25
+
+
+[15:51:32] ###LOG START###
+[15:51:32] Renderer: GeForce GTX TITAN Z/PCIe/SSE2
+[15:51:32] OpenGL Version: 3.2.0 NVIDIA 347.25
+
+
+[15:55:24] ###LOG START###
+[15:55:24] Renderer: GeForce GTX TITAN Z/PCIe/SSE2
+[15:55:24] OpenGL Version: 3.2.0 NVIDIA 347.25
+
+
+[15:58:13] ###LOG START###
+[15:58:13] Renderer: GeForce GTX TITAN Z/PCIe/SSE2
+[15:58:13] OpenGL Version: 3.2.0 NVIDIA 347.25
+
+
+[15:59:23] ###LOG START###
+[15:59:24] Renderer: GeForce GTX TITAN Z/PCIe/SSE2
+[15:59:24] OpenGL Version: 3.2.0 NVIDIA 347.25
+
+
+[15:59:55] ###LOG START###
+[15:59:55] Renderer: GeForce GTX TITAN Z/PCIe/SSE2
+[15:59:55] OpenGL Version: 3.2.0 NVIDIA 347.25
+
+
+[16:1:37] ###LOG START###
+[16:1:38] Renderer: GeForce GTX TITAN Z/PCIe/SSE2
+[16:1:38] OpenGL Version: 3.2.0 NVIDIA 347.25
+
+
+[16:2:13] ###LOG START###
+[16:2:13] Renderer: GeForce GTX TITAN Z/PCIe/SSE2
+[16:2:13] OpenGL Version: 3.2.0 NVIDIA 347.25
+
+
+[16:4:52] ###LOG START###
+[16:4:52] Renderer: GeForce GTX TITAN Z/PCIe/SSE2
+[16:4:52] OpenGL Version: 3.2.0 NVIDIA 347.25

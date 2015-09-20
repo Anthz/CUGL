@@ -112,6 +112,11 @@ void DrawableSurface::Initialise()
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 	glDeleteBuffers(1, &vbo);
+<<<<<<< HEAD
+=======
+
+	GenTexture();
+>>>>>>> origin/master
 }
 
 void DrawableSurface::GenTexture()
@@ -188,6 +193,6 @@ void DrawableSurface::MapTexture()
 	resourceDesc.res.array.array = texArray;
 
 	tex = 0;
-	cudaCreateSurfaceObject(tex, &resourceDesc);
+	cudaCreateSurfaceObject(&tex, &resourceDesc);
 }
 

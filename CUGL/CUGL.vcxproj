@@ -55,12 +55,17 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>cudart.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(CUDA_PATH)/lib/$(PlatformName);%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
     </Link>
+    <CudaCompile>
+      <CodeGeneration>compute_35,sm_35;compute_37,sm_37;compute_50,sm_50;</CodeGeneration>
+      <CudaRuntime>Shared</CudaRuntime>
+    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -69,6 +74,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -77,6 +83,10 @@
       <AdditionalDependencies>cudart.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(CUDA_PATH)/lib/$(PlatformName);%(AdditionalLibraryDirectories);$(CudaToolkitLibDir)</AdditionalLibraryDirectories>
     </Link>
+    <CudaCompile>
+      <CodeGeneration>compute_35,sm_35;compute_37,sm_37;compute_50,sm_50;</CodeGeneration>
+      <CudaRuntime>Shared</CudaRuntime>
+    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CUGL.cpp" />

@@ -51,9 +51,12 @@
     <ClCompile Include="DrawableSurface.cpp">
       <Filter>Source Files\C/C++</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="CUGLBuffer.cpp">
       <Filter>Source Files\C/C++</Filter>
     </ClCompile>
+=======
+>>>>>>> origin/master
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CUGL.h">

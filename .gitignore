@@ -47,6 +47,8 @@ dlldata.c
 *.pgd
 *.rsp
 *.sbr
+*.sdf
+*.suo
 *.tlb
 *.tli
 *.tlh
@@ -229,3 +231,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+*.exe
+*.ilk
