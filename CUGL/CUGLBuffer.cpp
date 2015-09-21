@@ -1,65 +1,61 @@
 #include "CUGLBuffer.h"
 
-
-CUGLBuffer::CUGLBuffer(int numBuffers)
+CUGLBuffer::CUGLBuffer()
 {
-	count = numBuffers;
-	bufferSize = new int[count];
+	VBO = new GLuint;
+	glGenBuffers(1, VBO);
 }
 
 CUGLBuffer::~CUGLBuffer()
 {
-	delete[] VBO;
-	delete[] bufferSize;
+	delete VBO;
 }
 
-bool CUGLBuffer::InitVBO(int *bufferCapacity, float **bufferData, unsigned int *bufferUsage,
-							int *bufferIndex, int *attribSize, GLenum *bufferType, bool *normalised)
+/************************************************************************
+* index: buffer id
+* bufferCapacity: total number of elements per buffer
+* bufferData: data to be copied to buffer
+* bufferUsage: usage (GL_STREAM_DRAW, GL_STATIC_DRAW, GL_DYNAMIC_DRAW...)
+* attribIndex: id of attrib in shader
+* attribSize: number of elements per attrib
+* bufferType: type of buffer elements (GL_FLOAT...)
+* normalised: T/F
+************************************************************************/
+bool CUGLBuffer::InitVBO(int bufferCapacity, float *bufferData, GLenum bufferUsage,
+	int attribIndex, int attribSize, GLenum bufferType, bool normalised)
 {
-	if(sizeof(*bufferCapacity) != sizeof(int) * count)
-	{
-		if(sizeof(*bufferCapacity) == sizeof(int))
-		{
-			for(int i = 0; i < count; ++i)
-			{
-				bufferSize[i] = *bufferCapacity;
-			}
-		}
-		else
-		{
-			Logger::Log("Capacity/Buffer mismatch. Either provide individual sizes or a single value.");
-			return false;
-		}
-	}
-	else
-	{
-		for(int i = 0; i < count; ++i)
-		{
-			bufferSize[i] = bufferCapacity[i];
-		}
-	}
+	bSize = bufferCapacity;
+	aIndex = attribIndex;
+	aSize = attribSize;
+	bType = bufferType;
+	bUsage = bufferUsage;
+	norm = normalised;
 
-	VBO = new GLuint[count];
-	glGenBuffers(count, VBO);
-	for(int i = 0; i < count; ++i)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, VBO[i]);
-		glBufferData(GL_ARRAY_BUFFER, bufferCapacity[i], (GLvoid*)bufferData[i], bufferUsage[i]);
-		glVertexAttribPointer((GLuint)bufferIndex, attribSize[i], bufferType[i], normalised[i], 0, 0);
-		glEnableVertexAttribArray((GLuint)bufferIndex[i]);
-	}
+	vao = 0;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glBindBuffer(GL_ARRAY_BUFFER, *VBO);
+	glBufferData(GL_ARRAY_BUFFER, bSize * sizeof(float), bufferData, bUsage);
+	glVertexAttribPointer((GLuint)aIndex, aSize, bType, norm, 0, 0);
+	glEnableVertexAttribArray((GLuint)aIndex);
+
+	RegisterBuffer();
 
 	return true;
 }
 
-GLuint *CUGLBuffer::GetVBO(int index)
+bool CUGLBuffer::RegisterBuffer()
 {
-	return &VBO[index];
+	if(cudaGraphicsGLRegisterBuffer(cudaVBO, *VBO, cudaGraphicsMapFlagsNone) != cudaSuccess)
+	{
+		Logger::Log("Failed to register GL buffer with CUDA.");
+		return false;
+	}
+
+	cudaMalloc((void**)&d_Buffer, sizeof(float) * bSize);
+	//cudaMemset(d_Buffer, 0, sizeof(T) * bSize);
+
+	Logger::Log("Registered GL buffer with CUDA.");
+	return true;
 }
-
-GLuint *CUGLBuffer::GetAllVBO()
-{
-	return VBO;
-}
-
-

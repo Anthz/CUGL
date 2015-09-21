@@ -2,23 +2,35 @@
 #include <GL\glew.h>
 #include <cuda_gl_interop.h>
 #include "Utilities.h"
+
 class CUGLBuffer
 {
 public:
-	CUGLBuffer(int numBuffers);
+	CUGLBuffer();
 	~CUGLBuffer();
 
-	GLuint *GetVBO(int index);
-	GLuint *GetAllVBO();
+	bool InitVBO(int bufferCapacity, float *bufferData, GLenum bufferUsage,
+		int bufferIndex, int attribSize, GLenum bufferType, bool normalised);
+	bool RegisterBuffer();
 
-	unsigned int Count() const { return count; }
+	float *DeviceBuffer() const { return d_Buffer; }
+	cudaGraphicsResource **CudaVBO() const { return cudaVBO; }
+	GLuint *GetVBO() const { return VBO; }
+
+	int BufferSize() const { return bSize; }
+	int AttribSize() const { return aSize; }
+	int AttribIndex() const { return aIndex; }
+	GLenum BufferUsage() const { return bUsage; }
+	GLenum BufferType() const { return bType; }
+	bool Normalised() const { return norm; }
+
+	GLuint vao;
 
 private:
-	bool InitVBO(int *bufferCapacity, float **bufferData, unsigned int *bufferUsage,
-					int *bufferIndex, int *attribSize, GLenum *bufferType, bool *normalised);
-
+	float *d_Buffer;
+	cudaGraphicsResource **cudaVBO;
 	GLuint *VBO;
-	int count, *bufferSize;
-
+	int bSize, aIndex, aSize;
+	GLenum bType, bUsage;
+	bool norm;
 };
-

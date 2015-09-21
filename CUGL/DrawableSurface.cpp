@@ -112,11 +112,8 @@ void DrawableSurface::Initialise()
 	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 	glDeleteBuffers(1, &vbo);
-<<<<<<< HEAD
-=======
 
 	GenTexture();
->>>>>>> origin/master
 }
 
 void DrawableSurface::GenTexture()

@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "DrawableSurface.h"
 #include "Kernel.h"
+#include "CUGLBuffer.h"
 
 class CUGL
 {
@@ -27,6 +28,6 @@ private:
 	GLContext *mainWND;
 	Shader *shader;
 
-	DrawableSurface *drawableSurface;
+	CUGLBuffer *vbo;
 };
 

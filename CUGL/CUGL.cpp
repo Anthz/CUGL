@@ -12,10 +12,19 @@ bool CUGL::Initialise()
 {
 	glClearColor(0.4f, 0.6f, 0.9f, 0.0f);
 
-	shader = new Shader("Colour.vert", "Colour.frag");
-	drawableSurface = new DrawableSurface(DrawableSurface::SQUARE, shader, dim3(100, 100, 0));
-	drawableSurface->MapTexture();
+	float points[] = {
+		-0.5f, -0.5f, 0.0f,
+		-0.5f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		-0.5f, -0.5f, 0.0f
+	};
 
+	shader = new Shader("Colour.vert", "Colour.frag");
+	shader->Bind();
+	vbo = new CUGLBuffer();
+	vbo->InitVBO(6 * 3, points, GL_DYNAMIC_DRAW, 0, 3, GL_FLOAT, false);
 	return true;
 }
 
@@ -35,21 +44,35 @@ void CUGL::Update()
 {
 	UpdateFPS();
 
-	if(GLFW_PRESS == glfwGetKey(mainWND->Handle(), GLFW_KEY_ESCAPE)) 
+	if(GLFW_PRESS == glfwGetKey(mainWND->Handle(), GLFW_KEY_ESCAPE))
 	{
 		glfwSetWindowShouldClose(mainWND->Handle(), 1);
 	}
 
-	glfwPollEvents();
+	if(GLFW_PRESS == glfwGetKey(mainWND->Handle(), GLFW_KEY_F5))
+	{
+		/*if(cudaGraphicsMapResources(1, vbo->CudaVBO(), 0) != cudaSuccess)
+			printf("Failed\n");
 
-	Kernel::ExecuteKernel(drawableSurface->Tex(), drawableSurface->Dims());
+		cudaGraphicsResourceGetMappedPointer((void**)vbo->DeviceBuffer(), (size_t*)vbo->BufferSize(), *vbo->CudaVBO());
+
+		Kernel::ExecuteKernel(*vbo->CudaVBO(), dim3(100, 100, 100));
+
+		if(cudaGraphicsUnmapResources(1, vbo->CudaVBO(), 0) != cudaSuccess)
+			printf("Failed\n");*/
+	}
+
+	glfwPollEvents();
 }
 
 void CUGL::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	drawableSurface->Render();
+	shader->Bind();
+	glBindBuffer(GL_ARRAY_BUFFER, *vbo->GetVBO());
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	shader->Unbind();
 
 	glfwSwapBuffers(mainWND->Handle());
 }
