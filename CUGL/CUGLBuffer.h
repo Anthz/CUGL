@@ -13,8 +13,8 @@ public:
 		int bufferIndex, int attribSize, GLenum bufferType, bool normalised);
 	bool RegisterBuffer();
 
-	float *DeviceBuffer() const { return d_Buffer; }
-	cudaGraphicsResource **CudaVBO() const { return cudaVBO; }
+	(float*)& DeviceBuffer() { return d_Buffer; }
+	cudaGraphicsResource_t *CudaVBO() const { return cudaVBO; }
 	GLuint *GetVBO() const { return VBO; }
 
 	int BufferSize() const { return bSize; }
@@ -28,7 +28,7 @@ public:
 
 private:
 	float *d_Buffer;
-	cudaGraphicsResource **cudaVBO;
+	cudaGraphicsResource_t *cudaVBO;
 	GLuint *VBO;
 	int bSize, aIndex, aSize;
 	GLenum bType, bUsage;

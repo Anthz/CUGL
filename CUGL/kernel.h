@@ -1,5 +1,5 @@
 class Kernel
 {
 public:
-	static void ExecuteKernel(cudaGraphicsResource *buffer, dim3 dimensions);
+	static void ExecuteKernel(float *buffer, dim3 dimensions);
 };

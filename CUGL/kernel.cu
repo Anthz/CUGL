@@ -25,7 +25,7 @@ __global__ void Setup_Rand(curandState *state)
 	curand_init(1234, gid, 0, &state[gid]);	//change seed
 }
 
-__global__ void RandomKernel(cudaGraphicsResource *buffer, dim3 dimensions)
+__global__ void RandomKernel(float *buffer, dim3 dimensions)
 {
 	int x = blockIdx.x * blockDim.x + threadIdx.x;
 	int y = blockIdx.y * blockDim.y + threadIdx.y;
@@ -35,8 +35,7 @@ __global__ void RandomKernel(cudaGraphicsResource *buffer, dim3 dimensions)
 		return;
 	}
 
-	float4 element = make_float4(1.0f, 0.0f, 0.0f, 1.0f);
-	//surf2Dwrite(element, tex, x * sizeof(float4), y);	//undefined in .cu file
+	buffer[x] *= 1.1f;
 }
 
 // int main()
@@ -44,12 +43,12 @@ __global__ void RandomKernel(cudaGraphicsResource *buffer, dim3 dimensions)
 // 	
 // }
 
-void Kernel::ExecuteKernel(cudaGraphicsResource *buffer, dim3 dimensions)
+void Kernel::ExecuteKernel(float *buffer, dim3 dimensions)
 {
-	dim3 blockDim(32, 32, 1);
-	dim3 gridDim(ceil((float)dimensions.x / (float)blockDim.x), ceil((float)dimensions.y / (float)blockDim.y), 1);
+	dim3 blockDim(6, 1, 1);
+	//dim3 gridDim(ceil((float)dimensions.x / (float)blockDim.x), ceil((float)dimensions.y / (float)blockDim.y), 1);
 
-	RandomKernel << <gridDim, blockDim >> >(buffer, dimensions);
+	RandomKernel << <1, blockDim >> >(buffer, dimensions);
 	cudaError_t e = cudaGetLastError();
 	if(e != cudaSuccess)
 	{

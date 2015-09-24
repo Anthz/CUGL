@@ -9,6 +9,7 @@ CUGLBuffer::CUGLBuffer()
 CUGLBuffer::~CUGLBuffer()
 {
 	delete VBO;
+	delete cudaVBO;
 }
 
 /************************************************************************
@@ -40,6 +41,8 @@ bool CUGLBuffer::InitVBO(int bufferCapacity, float *bufferData, GLenum bufferUsa
 	glVertexAttribPointer((GLuint)aIndex, aSize, bType, norm, 0, 0);
 	glEnableVertexAttribArray((GLuint)aIndex);
 
+	cudaVBO = (cudaGraphicsResource_t*)malloc(sizeof(cudaGraphicsResource_t));
+
 	RegisterBuffer();
 
 	return true;
@@ -47,13 +50,12 @@ bool CUGLBuffer::InitVBO(int bufferCapacity, float *bufferData, GLenum bufferUsa
 
 bool CUGLBuffer::RegisterBuffer()
 {
-	if(cudaGraphicsGLRegisterBuffer(cudaVBO, *VBO, cudaGraphicsMapFlagsNone) != cudaSuccess)
+	if(!ERRORCHECK(cudaGraphicsGLRegisterBuffer(cudaVBO, *VBO, cudaGraphicsRegisterFlagsNone)))
 	{
-		Logger::Log("Failed to register GL buffer with CUDA.");
 		return false;
 	}
 
-	cudaMalloc((void**)&d_Buffer, sizeof(float) * bSize);
+	//ERRORCHECK(cudaMalloc((void**)d_Buffer, sizeof(float) * bSize));
 	//cudaMemset(d_Buffer, 0, sizeof(T) * bSize);
 
 	Logger::Log("Registered GL buffer with CUDA.");
