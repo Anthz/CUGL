@@ -35,7 +35,7 @@ __global__ void RandomKernel(float *buffer, dim3 dimensions)
 		return;
 	}
 
-	buffer[x] *= 1.1f;
+	buffer[x] *= 1.05f;
 }
 
 // int main()
@@ -45,10 +45,10 @@ __global__ void RandomKernel(float *buffer, dim3 dimensions)
 
 void Kernel::ExecuteKernel(float *buffer, dim3 dimensions)
 {
-	dim3 blockDim(6, 1, 1);
+	dim3 blockDim(18, 1, 1);
 	//dim3 gridDim(ceil((float)dimensions.x / (float)blockDim.x), ceil((float)dimensions.y / (float)blockDim.y), 1);
 
-	RandomKernel << <1, blockDim >> >(buffer, dimensions);
+	RandomKernel<<<1, blockDim >>>(buffer, dimensions);
 	cudaError_t e = cudaGetLastError();
 	if(e != cudaSuccess)
 	{

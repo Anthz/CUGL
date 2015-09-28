@@ -1,5 +1,13 @@
 #include "Utilities.h"
 
+float CUTimer::ElapsedTime()
+{
+	float ms = 0;
+	cudaEventElapsedTime(&ms, start, stop);
+	Logger::Log("Kernel Time: " + std::to_string(ms) + "ms");
+	return ms;
+}
+
 namespace Logger
 {
 	std::string path = "";
@@ -77,3 +85,4 @@ namespace Logger
 		}
 	}
 }
+

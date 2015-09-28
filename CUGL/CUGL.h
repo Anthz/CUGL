@@ -29,5 +29,6 @@ private:
 	Shader *shader;
 
 	CUGLBuffer *vbo;
+	CUTimer *timer;
 };
 

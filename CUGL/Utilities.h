@@ -39,7 +39,7 @@ public:
 
 	inline void Begin() { cudaEventRecord(start); }
 	inline void End() { cudaEventRecord(stop); cudaEventSynchronize(stop); }
-	inline void ElapsedTime(float &ms) { cudaEventElapsedTime(&ms, start, stop); }
+	float ElapsedTime();
 
 private:
 	cudaEvent_t start, stop;
