@@ -38,7 +38,7 @@ public:
 	~CUTimer() { cudaEventDestroy(start); cudaEventDestroy(stop); }
 
 	inline void Begin() { cudaEventRecord(start); }
-	inline void End() { cudaEventRecord(stop); cudaEventSynchronize(stop); }
+	inline void End() { cudaEventRecord(stop); cudaEventSynchronize(stop); ElapsedTime(); }
 	float ElapsedTime();
 
 private:

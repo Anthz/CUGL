@@ -1,0 +1,152 @@
+[11:55:31] ###LOG START###
+[11:55:32] Renderer: GeForce GTX 660/PCIe/SSE2
+[11:55:32] OpenGL Version: 3.2.0 NVIDIA 355.82
+[11:55:32] Registered GL buffer with CUDA.
+[11:56:11] Kernel Time: 0.002432ms
+
+
+[12:3:24] ###LOG START###
+[12:3:24] Renderer: GeForce GTX 660/PCIe/SSE2
+[12:3:24] OpenGL Version: 3.2.0 NVIDIA 355.82
+[12:3:24] Registered GL buffer with CUDA.
+
+
+[12:31:10] ###LOG START###
+[12:31:10] Renderer: GeForce GTX 660/PCIe/SSE2
+[12:31:10] OpenGL Version: 3.2.0 NVIDIA 355.82
+[12:31:10] Registered GL buffer with CUDA.
+[12:31:11] Kernel Time: 0.006720ms
+[12:31:11] Kernel Time: 0.006688ms
+[12:31:11] Kernel Time: 0.006656ms
+[12:31:11] Kernel Time: 0.006816ms
+[12:31:11] Kernel Time: 0.006752ms
+[12:31:12] Kernel Time: 0.006912ms
+[12:31:12] Kernel Time: 0.006688ms
+[12:31:12] Kernel Time: 0.006656ms
+[12:31:12] Kernel Time: 0.006624ms
+[12:31:12] Kernel Time: 0.006656ms
+[12:31:12] Kernel Time: 0.006688ms
+[12:31:12] Kernel Time: 0.006656ms
+
+
+[12:56:36] ###LOG START###
+[12:56:36] Renderer: GeForce GTX 660/PCIe/SSE2
+[12:56:36] OpenGL Version: 3.2.0 NVIDIA 355.82
+
+
+[12:56:49] ###LOG START###
+[12:56:50] Renderer: GeForce GTX 660/PCIe/SSE2
+[12:56:50] OpenGL Version: 3.2.0 NVIDIA 355.82
+
+
+[13:12:36] ###LOG START###
+[13:12:36] Renderer: GeForce GTX 660/PCIe/SSE2
+[13:12:36] OpenGL Version: 3.2.0 NVIDIA 355.82
+[13:12:36] Registered GL buffer with CUDA.
+[13:12:37] Kernel Time: 0.006784ms
+[13:12:37] Kernel Time: 0.006656ms
+[13:12:37] Kernel Time: 0.006752ms
+[13:12:37] Kernel Time: 0.006656ms
+[13:12:37] Kernel Time: 0.006816ms
+[13:12:38] Kernel Time: 0.006944ms
+[13:12:38] Kernel Time: 0.005472ms
+[13:12:38] Kernel Time: 0.005408ms
+[13:12:38] Kernel Time: 0.005472ms
+[13:12:39] Kernel Time: 0.005440ms
+[13:12:40] Kernel Time: 0.005408ms
+[13:12:40] Kernel Time: 0.006688ms
+[13:12:40] Kernel Time: 0.006752ms
+[13:12:40] Kernel Time: 0.006688ms
+[13:12:40] Kernel Time: 0.006656ms
+[13:12:40] Kernel Time: 0.006688ms
+[13:12:40] Kernel Time: 0.006624ms
+[13:12:40] Kernel Time: 0.006720ms
+[13:12:41] Kernel Time: 0.006688ms
+[13:12:41] Kernel Time: 0.006688ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006592ms
+[13:12:41] Kernel Time: 0.006752ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006752ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006752ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006720ms
+[13:12:41] Kernel Time: 0.006688ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006688ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006624ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006688ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006624ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006816ms
+[13:12:41] Kernel Time: 0.006752ms
+[13:12:41] Kernel Time: 0.006656ms
+[13:12:41] Kernel Time: 0.006624ms
+[13:12:41] Kernel Time: 0.006720ms
+[13:12:41] Kernel Time: 0.006624ms
+[13:12:41] Kernel Time: 0.006688ms
+[13:12:41] Kernel Time: 0.006624ms
+[13:12:41] Kernel Time: 0.006720ms
+[13:12:41] Kernel Time: 0.011200ms
+
+
+[13:17:43] ###LOG START###
+[13:17:43] Renderer: GeForce GTX 660/PCIe/SSE2
+[13:17:43] OpenGL Version: 3.2.0 NVIDIA 355.82
+[13:17:43] Registered GL buffer with CUDA.
+[13:17:44] Kernel Time: 0.006816ms
+[13:17:44] Kernel Time: 0.005440ms
+[13:17:44] Kernel Time: 0.005376ms
+[13:17:44] Kernel Time: 0.005440ms
+[13:17:44] Kernel Time: 0.005376ms
+[13:17:44] Kernel Time: 0.006752ms
+[13:17:44] Kernel Time: 0.005408ms
+[13:17:44] Kernel Time: 0.005408ms
+[13:17:44] Kernel Time: 0.005440ms
+[13:17:45] Kernel Time: 0.005472ms
+[13:17:45] Kernel Time: 0.005504ms
+[13:17:45] Kernel Time: 0.005440ms
+
+
+[13:41:17] ###LOG START###
+[13:41:18] Renderer: GeForce GTX 660/PCIe/SSE2
+[13:41:18] OpenGL Version: 3.2.0 NVIDIA 355.82
+
+
+[13:45:50] ###LOG START###
+[13:45:50] Renderer: GeForce GTX 660/PCIe/SSE2
+[13:45:50] OpenGL Version: 3.2.0 NVIDIA 355.82
+[13:45:51] Registered GL buffer with CUDA.
+[13:45:52] Kernel Time: 0.006752ms
+[13:45:52] Kernel Time: 0.006784ms
+[13:45:52] Kernel Time: 0.006656ms
+[13:45:52] Kernel Time: 0.006656ms
+[13:45:52] Kernel Time: 0.006816ms
+[13:45:52] Kernel Time: 0.006656ms
+[13:45:52] Kernel Time: 0.006752ms
+[13:45:52] Kernel Time: 0.006656ms
+[13:45:53] Kernel Time: 0.006656ms
+[13:45:53] Kernel Time: 0.006688ms
+
+
+[14:49:43] ###LOG START###
+[14:49:43] Renderer: GeForce GTX 660/PCIe/SSE2
+[14:49:43] OpenGL Version: 3.2.0 NVIDIA 355.82
+[14:49:43] Registered GL buffer with CUDA.
+[14:49:49] Kernel Time: 0.006752ms
+[14:49:49] Kernel Time: 0.006656ms
+[14:49:49] Kernel Time: 0.006688ms
+[14:49:49] Kernel Time: 0.006656ms
+[14:49:49] Kernel Time: 0.006688ms
+[14:49:49] Kernel Time: 0.006688ms
+[14:49:49] Kernel Time: 0.006688ms

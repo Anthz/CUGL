@@ -24,8 +24,8 @@ bool CUGL::Initialise()
 	timer = new CUTimer();
 	shader = new Shader("Colour.vert", "Colour.frag");
 	shader->Bind();
-	vbo = new CUGLBuffer();
-	vbo->InitVBO(6 * 3, points, GL_DYNAMIC_DRAW, 0, 3, GL_FLOAT, false);
+	vbo = new CUGLBuffer(1);
+	vbo->InitVBO(0, 6 * 3, points, GL_DYNAMIC_DRAW, 0, 3, GL_FLOAT, false);
 	return true;
 }
 
@@ -54,7 +54,7 @@ void CUGL::Update()
 	{
 		if(ERRORCHECK(cudaGraphicsMapResources(1, vbo->CudaVBO(), 0)))
 		{
-			size_t size = vbo->BufferSize() * sizeof(float);
+			size_t size = vbo->BufferSize(0) * sizeof(float);
 
 			ERRORCHECK(cudaGraphicsResourceGetMappedPointer((void**)&vbo->DeviceBuffer(), &size, *vbo->CudaVBO()));
 
@@ -63,7 +63,6 @@ void CUGL::Update()
 			Kernel::ExecuteKernel(vbo->DeviceBuffer(), dim3(100, 100, 100));
 
 			timer->End();
-			timer->ElapsedTime();
 
 			ERRORCHECK(cudaGraphicsUnmapResources(1, vbo->CudaVBO(), 0));
 		}
