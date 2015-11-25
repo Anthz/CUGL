@@ -2,6 +2,9 @@
 
 std::vector<CUGLBuffer*> CUSettings::BufferList;
 
+//param > buffer
+//param - select from objects properties, buffers - order
+
 CUSettings::CUSettings(QWidget* parent) : QWidget(parent)
 {
 	mainLayout = new QVBoxLayout();

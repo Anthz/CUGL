@@ -15,6 +15,7 @@
 #include "glwidget.h"
 #include "glsettings.h"
 #include "cusettings.h"
+#include "utilities.h"
 
 namespace Ui
 {

@@ -34,7 +34,7 @@ SOURCES += main.cpp\
         glsettings.cpp \
         cusettings.cpp \
 		texturetab.cpp \
-		texture.cpp
+		texture.cpp \
 
 HEADERS  += mainwindow.h \
             glwidget.h \
@@ -56,7 +56,7 @@ HEADERS  += mainwindow.h \
             glsettings.h \
             cusettings.h \
 			texturetab.h \
-			texture.h
+			texture.h \
 
 FORMS    += mainwindow.ui
 

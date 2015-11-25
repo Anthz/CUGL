@@ -74,7 +74,7 @@ paramID(-1)
 
 CUGLBuffer::~CUGLBuffer()
 {
-	delete bData;
+	free(bData);
 
 	UnregisterBuffer(cudaBuf);
 
@@ -139,21 +139,49 @@ void CUGLBuffer::Randomise(float *data, int n) {
 	}
 }
 
+std::vector<QString> &split(const std::string &s, char delim, std::vector<QString> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(QString(item.c_str()));
+    }
+    return elems;
+}
+
+void CUGLBuffer::ParseFile(float *data)
+{
+	std::ifstream in(bDataPath.toStdString());
+	std::string s = "|";
+	std::vector<QString> elems;
+	int counter = 0;
+
+	getline(in, s);
+	while(s.size() != 0)
+	{	
+		split(s, ' ', elems);
+		data[counter + 0] = elems.at(0).toFloat();
+		data[counter + 1] = elems.at(1).toFloat();
+		data[counter + 2] = elems.at(2).toFloat();
+		data[counter + 3] = elems.at(3).toFloat();
+		//sscanf(s.c_str(), "%f %f %f %f", , data[counter + 1], data[counter + 2], data[counter + 3]);	//change format on type and aSize
+		counter += 4;
+		elems.clear();
+		getline(in, s);
+	}
+}
+
 bool CUGLBuffer::LoadData()
 {
 	switch(bTarget.first)
 	{
 	case GL_ARRAY_BUFFER:
 	{
-		//parse file into array
-		//put into const void *bData
-		//bSize = array.size() * bType.last
+		bData = malloc(bSize);
+
 		if(bDataPath == "")
-		{
-			//bData = nullptr;
-			bData = malloc(bSize);
 			Randomise((float*)bData, bCap);
-		}
+		else
+			ParseFile((float*)bData);
 		break;
 	}
 	case GL_PIXEL_UNPACK_BUFFER:

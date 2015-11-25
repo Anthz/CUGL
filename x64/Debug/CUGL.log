@@ -1,4 +1,4 @@
-﻿Build started 22/11/2015 19:33:13.
+﻿Build started 25/11/2015 10:57:19.
      1>Project "C:\Users\Anth\Documents\GitHub\CUGL\CUGL.vcxproj" on node 2 (Build target(s)).
      1>CustomBuild:
          Moc'ing bufferpopup.h...
@@ -16,8 +16,10 @@
          Moc'ing outputsettings.h...
          Moc'ing paramtab.h...
          Moc'ing texturetab.h...
+         "C:/Program
+         kernel.cu
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I. /I. /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v6.5\include" /IC:\Qt\5.5\msvc2013_64\include /IC:\Qt\5.5\msvc2013_64\include\QtWidgets /IC:\Qt\5.5\msvc2013_64\include\QtGui /IC:\Qt\5.5\msvc2013_64\include\QtANGLE /IC:\Qt\5.5\msvc2013_64\include\QtCore /Idebug /I. /I"C:\Qt\5.5\msvc2013_64\mkspecs\win32-msvc2013" /I.\GeneratedFiles /Zi /nologo /W3 /WX- /Od /D _WINDOWS /D UNICODE /D WIN32 /D WIN64 /D QT_WIDGETS_LIB /D QT_GUI_LIB /D QT_CORE_LIB /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt -w34100 -w34189 -w44996 Debug\moc_bufferpopup.cpp Debug\moc_controltab.cpp Debug\moc_cubuffertab.cpp Debug\moc_cugeneraltab.cpp Debug\moc_cusettings.cpp Debug\moc_glbuffertab.cpp Debug\moc_glgeneraltab.cpp Debug\moc_glsettings.cpp Debug\moc_glwidget.cpp Debug\moc_mainwindow.cpp Debug\moc_objectpopup.cpp Debug\moc_objecttab.cpp Debug\moc_outputsettings.cpp Debug\moc_paramtab.cpp Debug\moc_texturetab.cpp glwidget.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I. /I. /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v6.5\include" /IC:\Qt\5.5\msvc2013_64\include /IC:\Qt\5.5\msvc2013_64\include\QtWidgets /IC:\Qt\5.5\msvc2013_64\include\QtGui /IC:\Qt\5.5\msvc2013_64\include\QtANGLE /IC:\Qt\5.5\msvc2013_64\include\QtCore /Idebug /I. /I"C:\Qt\5.5\msvc2013_64\mkspecs\win32-msvc2013" /I.\GeneratedFiles /Zi /nologo /W3 /WX- /Od /D _WINDOWS /D UNICODE /D WIN32 /D WIN64 /D QT_WIDGETS_LIB /D QT_GUI_LIB /D QT_CORE_LIB /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt -w34100 -w34189 -w44996 Debug\moc_bufferpopup.cpp Debug\moc_controltab.cpp Debug\moc_cubuffertab.cpp Debug\moc_cugeneraltab.cpp Debug\moc_cusettings.cpp Debug\moc_glbuffertab.cpp Debug\moc_glgeneraltab.cpp Debug\moc_glsettings.cpp Debug\moc_glwidget.cpp Debug\moc_mainwindow.cpp Debug\moc_objectpopup.cpp Debug\moc_objecttab.cpp Debug\moc_outputsettings.cpp Debug\moc_paramtab.cpp Debug\moc_texturetab.cpp
          moc_bufferpopup.cpp
          moc_controltab.cpp
          moc_cubuffertab.cpp
@@ -33,10 +35,6 @@
          moc_outputsettings.cpp
          moc_paramtab.cpp
          moc_texturetab.cpp
-         glwidget.cpp
-     1>glwidget.cpp(143): warning C4100: 'i' : unreferenced formal parameter
-     1>glwidget.cpp(163): warning C4100: 'b' : unreferenced formal parameter
-     1>glwidget.cpp(167): warning C4100: 'b' : unreferenced formal parameter
          Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"debug\\CUGL.exe" /NOLOGO /LIBPATH:C:\Qt\5.5\msvc2013_64\lib /LIBPATH:C:/qt/5.5/msvc2013_64/lib /LIBPATH:C:\Qt\5.5\msvc2013_64\lib /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v6.5\lib\x64" C:\Qt\5.5\msvc2013_64\lib\qtmaind.lib shell32.lib C:/qt/5.5/msvc2013_64/lib\Qt5Cored.lib "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v6.5\lib\x64\cuda.lib" "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v6.5\lib\x64\cudart.lib" C:\Qt\5.5\msvc2013_64\lib\Qt5Widgetsd.lib C:\Qt\5.5\msvc2013_64\lib\Qt5Guid.lib C:\Qt\5.5\msvc2013_64\lib\Qt5Cored.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"debug\CUGL.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /MACHINE:X64 "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" debug\obj\kernel_cuda.obj
@@ -77,9 +75,10 @@
          x64\Debug\shader.obj
          x64\Debug\texture.obj
          x64\Debug\texturetab.obj
+         x64\Debug\utilities.obj
          CUGL.vcxproj -> C:\Users\Anth\Documents\GitHub\CUGL\debug\CUGL.exe
      1>Done Building Project "C:\Users\Anth\Documents\GitHub\CUGL\CUGL.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:45.73
+Time Elapsed 00:00:58.23

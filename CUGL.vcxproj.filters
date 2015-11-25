@@ -44,12 +44,12 @@
       <ParseFiles>false</ParseFiles>
     </Filter>
     <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{ae55d420-c335-4bfb-9ff9-06197098c09c}</UniqueIdentifier>
+      <UniqueIdentifier>{c278cda5-a64b-4220-baf8-3deeb49a3b37}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{bf7d021c-4153-4038-a9c3-011111a6c5de}</UniqueIdentifier>
+      <UniqueIdentifier>{554785b5-99a1-4fa0-9a92-5bb627930d7a}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
@@ -211,6 +211,9 @@
     <ClCompile Include="Release\moc_texturetab.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="bufferpopup.h">
@@ -296,6 +299,9 @@
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

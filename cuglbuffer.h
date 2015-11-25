@@ -13,6 +13,9 @@
 #include <cuda_gl_interop.h>
 #include <QOpenGLFunctions_3_3_Core>
 #include <QImage>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 #include "glwidget.h"
 
@@ -48,6 +51,7 @@ public:
 private:
 	void InitTex();
 	void Randomise(float *data, int n);
+	void ParseFile(float *data);
 	bool LoadData();
 
 	QOpenGLFunctions_3_3_Core* glFuncs;

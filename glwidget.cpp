@@ -18,7 +18,7 @@ GLWidget::GLWidget(QWidget* parent) : QOpenGLWidget(parent)
 	projMatrix = new QMatrix4x4();
 	viewMatrix = new QMatrix4x4();
 	viewMatrix->lookAt(
-		QVector3D(0.0, 0.0, 300.0), // Eye
+		QVector3D(0.0, 0.0, -300.0), // Eye
 		QVector3D(0.0, 0.0, 0.0), // Focal Point
 		QVector3D(0.0, 1.0, 0.0)); // Up vector
 	drawMode = GL_TRIANGLES;
@@ -51,13 +51,20 @@ void GLWidget::initializeGL()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	Shader *shader = new Shader("Textured Particle Shader", "./Shaders/t_bb_Particle.vert", "./Shaders/t_bb_Particle.frag");
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+
+    Shader *shader = new Shader("Textured Particle Shader", "./Shaders/t_bb_Particle.vert", "./Shaders/t_bb_Particle.frag");
 	ShaderList.push_back(shader);
 
 	Shader *shader2 = new Shader("Particle Shader", "./Shaders/bb_Particle.vert", "./Shaders/bb_Particle.frag");
 	ShaderList.push_back(shader2);
+
+	Shader *shader3 = new Shader("Simple Shader", "./Shaders/simple.vert", "./Shaders/simple.frag");
+	ShaderList.push_back(shader3);
 
 	int r, g, b, a;
 	QColor c("#6495ED");
