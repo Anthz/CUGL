@@ -13,11 +13,8 @@ int main(int argc, char* argv[])
 	format.setSwapInterval(0); //disable vsync
 	if(QCoreApplication::arguments().contains(QStringLiteral("--multisample")))
 		format.setSamples(4);
-	if(QCoreApplication::arguments().contains(QStringLiteral("--coreprofile")))
-	{
-		format.setVersion(3, 3);
-		format.setProfile(QSurfaceFormat::CoreProfile);
-	}
+	format.setVersion(3, 3);
+	format.setProfile(QSurfaceFormat::CoreProfile);
 	QSurfaceFormat::setDefaultFormat(format);
 
 	MainWindow window;

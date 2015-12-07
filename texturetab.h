@@ -12,6 +12,7 @@
 #include <QScrollArea>
 
 #include "texture.h"
+#include "texturepopup.h"
 
 class TextureTab : public QWidget
 {

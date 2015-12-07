@@ -16,17 +16,16 @@
 #include <stdlib.h>
 #include "utilities.h"
 
-#define N_BODIES 8192
-#define DT 0.1f // time step
+#define N_BODIES 601
+#define DT 5000.0f // time step
 #define N_ITERS 10
 #define BLOCK_SIZE 256
 #define N_BLOCKS (N_BODIES + BLOCK_SIZE - 1) / BLOCK_SIZE
 #define SOFTENING 1e-9f
-
-//G = 6.67300 × 10^−11 m^3/kg s^2
+#define G 6.67e-11 //4.0 * 3.14159265 * 3.14159265	//6.67e-11
 
 __device__
-float4 CalcForce(float4 *pos, float dt, float4 derivative)
+float4 CalcForce(float4 *pos, float4 derivative)
 {
 	//calc or pass as param?
 	int i = blockDim.x * blockIdx.x + threadIdx.x;
@@ -46,23 +45,24 @@ float4 CalcForce(float4 *pos, float dt, float4 derivative)
 
 		float4 pOther = pos[j];
 
-		float dx = pOther.x - p.x;
-		float dy = pOther.y - p.y;
-		float dz = pOther.z - p.z;
+		float dx = p.x - pOther.x;	//pOther.x - p.x;
+		float dy = p.y - pOther.y;	//pOther.y - p.y;
+		float dz = p.z - pOther.z;	//pOther.z - p.z;
 		float distSqr = dx*dx + dy*dy + dz*dz + SOFTENING;
-		float invDist = rsqrtf(distSqr);
-		float invDist3 = invDist * invDist * invDist;
-		float s = pOther.w * invDist3;
+		float dist = sqrtf(distSqr);
+		//float invDist = rsqrtf(distSqr);
+		//float invDist3 = invDist * invDist * invDist;
+		float s = -(G * pOther.w) / (dist * dist); //pOther.w * invDist3;
 
-		Fx += dx * s; Fy += dy * s; Fz += dz * s;
+		Fx += (s / dist) * dx; Fy += (s / dist) * dy; Fz += (s / dist) * dz;
 		//Fx += dx * invDist3; Fy += dy * invDist3; Fz += dz * invDist3;
 	}
 
-	return make_float4(dt*Fx, dt*Fy, dt*Fz, 1.0f);
+	return make_float4(Fx, Fy, Fz, 1.0f);
 }
 
 __device__
-float4 CalcVel(float4* vel, float dt, float4 derivative)
+float4 CalcVel(float4* vel, float4 derivative)
 {
 	int i = blockDim.x * blockIdx.x + threadIdx.x;
 
@@ -70,10 +70,6 @@ float4 CalcVel(float4* vel, float dt, float4 derivative)
 	v.x += derivative.x;
 	v.y += derivative.y;
 	v.z += derivative.z;
-	
-	v.x = v.x * dt;
-	v.y = v.y * dt;
-	v.z = v.z * dt;
 
 	return v;
 }
@@ -85,17 +81,17 @@ void NBody(float4 *posBuf, float4 *velBuf, float4 *pTemp, float4 *vTemp)
 
 	if(i < N_BODIES)
 	{
-		float4 v1 = CalcForce(posBuf, DT * 0.0, make_float4(0.0f, 0.0f, 0.0f, 0.0f));	//float4()
-		float4 p1 = CalcVel(velBuf, DT * 0.0, make_float4(0.0f, 0.0f, 0.0f, 0.0f));
-		
-		float4 v2 = CalcForce(posBuf, DT * 0.5, (DT / 2 * p1));
-		float4 p2 = CalcVel(velBuf, DT * 0.5, (DT / 2 * v1));
+		float4 v1 = CalcForce(posBuf, make_float4(0.0f, 0.0f, 0.0f, 0.0f));	//float4()
+		float4 p1 = velBuf[i]; //CalcVel(velBuf, make_float4(0.0f, 0.0f, 0.0f, 0.0f));
 
-		float4 v3 = CalcForce(posBuf, DT * 0.5, (DT / 2 * p2));
-		float4 p3 = CalcVel(velBuf, DT * 0.5, (DT / 2 * v2));
+		float4 v2 = CalcForce(posBuf, (DT / 2 * p1));
+		float4 p2 = CalcVel(velBuf, (DT / 2 * v1));
 
-		float4 v4 = CalcForce(posBuf, DT * 1.0, (DT * p3));		
-		float4 p4 = CalcVel(velBuf, DT * 1.0, (DT * v3));
+		float4 v3 = CalcForce(posBuf, (DT / 2 * p2));
+		float4 p3 = CalcVel(velBuf, (DT / 2 * v2));
+
+		float4 v4 = CalcForce(posBuf, (DT * p3));
+		float4 p4 = CalcVel(velBuf, (DT * v3));
 
 		vTemp[i] = (DT ⁄ 6) * (v1 + (2.0f * v2) + (2.0f * v3) + v4);
 		pTemp[i] = (DT ⁄ 6) * (p1 + (2.0f * p2) + (2.0f * p3) + p4);

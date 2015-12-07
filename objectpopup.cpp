@@ -14,16 +14,14 @@ ObjectPopup::ObjectPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 	bufferLabel = new QLabel("Buffers:");
 	textureLabel = new QLabel("Texture:");
 	shaderLabel = new QLabel("Shader:");
+	fboLabel = new QLabel("FBO:");
 
 	nameBox = new QLineEdit;
-	//SIGNAL/SLOT if there's parameters
-	connect(nameBox, SIGNAL(textChanged(QString)), this, SLOT(NameChanged(QString)));
 
 	instancesBox = new QSpinBox;
 	instancesBox->setMinimum(1);
 	instancesBox->setMaximum(999999);
 	instancesBox->setKeyboardTracking(false);
-	connect(instancesBox, SIGNAL(valueChanged(int)), this, SLOT(InstancesChanged(int)));
 
 	bufferBoxModel = new QStandardItemModel;
 	for(int i = 0; i < GLSettings::BufferList.size(); i++)
@@ -53,6 +51,13 @@ ObjectPopup::ObjectPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 		shaderBox->addItem(s->name);
 	}
 
+	fboBox = new QComboBox;
+	fboBox->addItem("N/A");
+	for each (GLuint i in GLWidget::FBOList)
+	{
+		fboBox->addItem(QString::number(i));
+	}
+
 	buttons = new QDialogButtonBox(QDialogButtonBox::Save | QDialogButtonBox::Cancel);
 	connect(buttons, SIGNAL(accepted()), this, SLOT(Save()));
 	connect(buttons, SIGNAL(rejected()), this, SLOT(close()));
@@ -67,7 +72,9 @@ ObjectPopup::ObjectPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 	mainLayout->addWidget(textureBox, 3, 1);
 	mainLayout->addWidget(shaderLabel, 4, 0);
 	mainLayout->addWidget(shaderBox, 4, 1);
-	mainLayout->addWidget(buttons, 5, 1);
+	mainLayout->addWidget(fboLabel, 5, 0);
+	mainLayout->addWidget(fboBox, 5, 1);
+	mainLayout->addWidget(buttons, 6, 1);
 
 	setLayout(mainLayout);
 }
@@ -93,6 +100,8 @@ ObjectPopup::ObjectPopup(QWidget* parent, Object *o) : ObjectPopup(parent)
 			}
 		}
 	}
+
+	fboBox->setCurrentIndex((o->FBO() != 0) ? fboBox->findText(QString::number(o->FBO())) : 0);
 }
 
 ObjectPopup::~ObjectPopup()
@@ -102,6 +111,7 @@ ObjectPopup::~ObjectPopup()
 	delete bufferLabel;
 	delete textureLabel;
 	delete shaderLabel;
+	delete fboLabel;
 	delete nameBox;
 	delete instancesBox;
 
@@ -114,6 +124,7 @@ ObjectPopup::~ObjectPopup()
 	delete bufferBox;
 	delete textureBox;
 	delete shaderBox;
+	delete fboBox;
 	delete buttons;
 	delete mainLayout;
 }
@@ -193,15 +204,15 @@ void ObjectPopup::Save()
 		QString name = nameBox->text();
 		int instances = instancesBox->value();
 
-		Texture *tex;
-		if(textureBox->currentIndex() == 0)
-			tex = nullptr;
-		else
-			tex = GLSettings::TextureList.at(textureBox->currentIndex() - 1);
+		Texture *tex = nullptr;
+		if(textureBox->currentIndex() != 0)
+			tex = GLSettings::TextureList.at(textureBox->currentIndex() - 1);			
 
 		if(!append)
 		{
 			Object* o = new Object(name, instances, buffers, tex, GLWidget::ShaderList.at(shaderBox->currentIndex()));
+			if(fboBox->currentIndex() != 0)
+				o->FBO(GLWidget::FBOList.at(fboBox->currentIndex() - 1));
 			GLSettings::ObjectList.push_back(o);
 			static_cast<ObjectTab*>(parent())->AddToTable(o);
 		}
@@ -212,6 +223,8 @@ void ObjectPopup::Save()
 			appObj->buffers = buffers;
 			appObj->texture = tex;
 			appObj->shader = GLWidget::ShaderList.at(shaderBox->currentIndex());
+			if(fboBox->currentIndex() != 0)
+				appObj->FBO(GLWidget::FBOList.at(fboBox->currentIndex() - 1));
 		}
 
 		close();

@@ -18,6 +18,7 @@
 #include <sstream>
 
 #include "glwidget.h"
+#include "utilities.h"
 
 class CUGLBuffer
 {
@@ -32,6 +33,7 @@ public:
 	static void UnmapResource(void* res);
 
 	void Bind();
+	void Unbind();
 	bool InitVBO();
 
 	void *CudaBuf() const { return cudaBuf; }

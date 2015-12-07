@@ -47,3 +47,12 @@ GLSettings::~GLSettings()
 	delete mainLayout;
 }
 
+QSize GLSettings::minimumSizeHint() const
+{
+	return QSize(500, 350);
+}
+
+QSize GLSettings::sizeHint() const
+{
+	return QSize((int)static_cast<QWidget*>(parent())->width() / 3, 350);
+}

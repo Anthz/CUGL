@@ -3,6 +3,7 @@
 Object::Object(QString name, int instances, std::vector<CUGLBuffer*> buffers, Texture *texture, Shader *shader)
 {
 	glFuncs = 0;
+	fbo = 0;
 
 	this->name = name;
 	this->instances = instances;
@@ -37,11 +38,13 @@ Object::Object(QString name, int instances, std::vector<CUGLBuffer*> buffers, Te
 		b->Bind();
 		//FUTURE IMPROVEMENT
 		//Loop for each attrib per buffer
-		b->aID.second = shader->GetAttribLoc(b->aID.first);
-		glFuncs->glVertexAttribPointer((GLuint)b->aID.second, b->aSize, std::get<0>(b->bType), b->norm, 0, 0);
-		glFuncs->glEnableVertexAttribArray((GLuint)b->aID.second);
+		//b->aID.second = shader->GetAttribLoc(b->aID.first);	//aID.second	//FUCKED UP MULTIPLE SHADERS!!!!!
+		glFuncs->glVertexAttribPointer((GLuint)shader->GetAttribLoc(b->aID.first), b->aSize, std::get<0>(b->bType), b->norm, 0, 0);
+		glFuncs->glEnableVertexAttribArray((GLuint)shader->GetAttribLoc(b->aID.first));
 		if(b->Cuda())
-			glFuncs->glVertexAttribDivisor((GLuint)b->aID.second, 1);
+			glFuncs->glVertexAttribDivisor((GLuint)shader->GetAttribLoc(b->aID.first), 1);
+
+		b->Unbind();
 	}
 
 	mLoc = shader->GetUniformLoc("uModelMatrix");
@@ -78,15 +81,19 @@ void Object::Draw(GLenum drawMode, bool wireframe)
 	if(wireframe)
 		glFuncs->glPolygonMode(GL_FRONT, GL_LINE);
 
-	glFuncs->glBindBuffer(GL_ARRAY_BUFFER, vao);
+	glFuncs->glBindVertexArray(vao);
 
 	if(texture != nullptr)
 		texture->Bind();
 
 	//glFuncs->glDrawArrays(drawMode, 0, buffers.at(0)->bCap / buffers.at(0)->aSize);
 	glFuncs->glDrawArraysInstanced(drawMode, 0, buffers.at(0)->bCap / buffers.at(0)->aSize, instances);
+
 	if(texture != nullptr)
 		texture->Unbind();
+
+	glFuncs->glBindVertexArray(0);
+	
 	shader->Release();
 }
 

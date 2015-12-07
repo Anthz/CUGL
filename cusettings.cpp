@@ -73,3 +73,13 @@ void CUSettings::TabChanged(int i)
 		break;
 	}
 }
+
+QSize CUSettings::minimumSizeHint() const
+{
+	return QSize(500, 350);
+}
+
+QSize CUSettings::sizeHint() const
+{
+	return QSize((int)static_cast<QWidget*>(parent())->width() / 3, 350);
+}

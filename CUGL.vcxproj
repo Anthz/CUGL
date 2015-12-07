@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{542D2B32-3337-39AE-9735-4C0B989A3A7E}</ProjectGuid>
+    <ProjectGuid>{32B69571-F7EC-3B0A-8372-CF7ABCD43161}</ProjectGuid>
     <RootNamespace>CUGL</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
   </PropertyGroup>
@@ -185,6 +185,9 @@
     <ClCompile Include="Debug\moc_paramtab.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Debug\moc_texturepopup.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Debug\moc_texturetab.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -242,16 +245,19 @@
     <ClCompile Include="Release\moc_paramtab.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Release\moc_texturepopup.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Release\moc_texturetab.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="texturepopup.cpp" />
     <ClCompile Include="texturetab.cpp" />
     <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="utilities.h" />
     <CustomBuild Include="bufferpopup.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 if errorlevel 1 goto VCEnd
@@ -539,6 +545,26 @@ endlocal
     </CustomBuild>
     <ClInclude Include="shader.h" />
     <ClInclude Include="texture.h" />
+    <CustomBuild Include="texturepopup.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+if errorlevel 1 goto VCEnd
+
+if errorlevel 1 goto VCEnd
+endlocal
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DNDEBUG "-I." "-IC:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v6.5\include" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\release" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing texturepopup.h...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+if errorlevel 1 goto VCEnd
+
+if errorlevel 1 goto VCEnd
+endlocal
+"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DWIN64 -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB "-I." "-IC:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v6.5\include" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtCore" "-I.\debug" "-I$(QTDIR)\mkspecs\win32-msvc2013"</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing texturepopup.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+    </CustomBuild>
     <CustomBuild Include="texturetab.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 if errorlevel 1 goto VCEnd
@@ -559,6 +585,7 @@ endlocal
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
+    <ClInclude Include="utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.ui">
@@ -578,7 +605,7 @@ endlocal
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Kernels\kernel.cu;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 if errorlevel 1 goto VCEnd
-"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/bin/nvcc" --use_fast_math -I"C:/Users/Anth/Documents/GitHub/CUGL/" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/include" -lcuda -lcudart --machine 64 -arch=sm_35 --compile -cudart static -DWIN32 -D_MBCS -Xcompiler /wd4819,/EHsc,/W3,/nologo,/O2,/Zi -Xcompiler /MD -c -o debug\obj\kernel_cuda.obj Kernels\kernel.cu
+"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/bin/nvcc" --use_fast_math -I"D:/GitHub/CUGL/" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/include" -lcuda -lcudart --machine 64 -arch=sm_35 --compile -cudart static -DWIN32 -D_MBCS -Xcompiler /wd4819,/EHsc,/W3,/nologo,/O2,/Zi -Xcompiler /MD -c -o debug\obj\kernel_cuda.obj Kernels\kernel.cu
 if errorlevel 1 goto VCEnd
 endlocal</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:/Program</Message>
@@ -590,7 +617,7 @@ endlocal</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Kernels\kernel.cu;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
 if errorlevel 1 goto VCEnd
-"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/bin/nvcc" -D_DEBUG --use_fast_math -I"C:/Users/Anth/Documents/GitHub/CUGL/" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/include" -lcuda -lcudart --machine 64 -arch=sm_35 --compile -cudart static -g -DWIN32 -D_MBCS -Xcompiler /wd4819,/EHsc,/W3,/nologo,/Od,/Zi,/RTC1 -Xcompiler /MDd -c -o debug\obj\kernel_cuda.obj Kernels\kernel.cu
+"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/bin/nvcc" -D_DEBUG --use_fast_math -I"D:/GitHub/CUGL/" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/include" -lcuda -lcudart --machine 64 -arch=sm_35 --compile -cudart static -g -G -DWIN32 -D_MBCS -Xcompiler /wd4819,/EHsc,/W3,/nologo,/Od,/Zi,/RTC1 -Xcompiler /MDd -c -o debug\obj\kernel_cuda.obj Kernels\kernel.cu
 if errorlevel 1 goto VCEnd
 endlocal</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"C:/Program</Message>

@@ -26,6 +26,9 @@ public:
 	explicit CUSettings(QWidget* parent = 0);
 	~CUSettings();
 
+	virtual QSize minimumSizeHint() const override;
+	virtual QSize sizeHint() const override;
+
 	static std::vector<CUGLBuffer*> BufferList;
 
 	std::vector<Device> deviceList;

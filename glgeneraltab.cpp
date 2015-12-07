@@ -6,12 +6,19 @@ GLGeneralTab::GLGeneralTab(QWidget* parent) : QWidget(parent)
 
 	widthLabel = new QLabel("Width:");
 	heightLabel = new QLabel("Height:");
-	projMatrixLabel = new QLabel("Projection Matrix:");
+	projMatrixLabel = new QLabel("Projection:");
+	fovLabel = new QLabel("VFOV:");
+	aspectLabel = new QLabel("Aspect:");
+	nearLabel = new QLabel("Near:");
+	farLabel = new QLabel("Far:");
+	leftLabel = new QLabel("Left:");
+	rightLabel = new QLabel("Right:");
+	bottomLabel = new QLabel("Bottom");
+	topLabel = new QLabel("Top:");
 	drawLabel = new QLabel("Draw Mode:");
 	colourLabel = new QLabel("Clear Colour:");
 	vsyncLabel = new QLabel("VSync:");
 	msaaLabel = new QLabel("MSAA:");
-	fovLabel = new QLabel("FOV:");
 
 	widthBox = new QSpinBox;
 	widthBox->setValue(GLWidget::Width());
@@ -30,10 +37,31 @@ GLGeneralTab::GLGeneralTab(QWidget* parent) : QWidget(parent)
 	projMatrixBox->addItem("Perspective");
 	projMatrixBox->addItem("Orthographic");
 
-	fovBox = new QSpinBox;
-	fovBox->setMaximum(120);
+	fovBox = new QDoubleSpinBox;
 	fovBox->setKeyboardTracking(false);
-	connect(fovBox, SIGNAL(valueChanged(int)), this, SLOT(FOVChanged(int)));
+
+	aspectBox = new QDoubleSpinBox;
+	aspectBox->setKeyboardTracking(false);
+
+	nearBox = new QDoubleSpinBox;
+	nearBox->setMaximum(0.0);
+	nearBox->setKeyboardTracking(false);
+
+	farBox = new QDoubleSpinBox;
+	farBox->setMinimum(0.0);
+	farBox->setKeyboardTracking(false);
+
+	leftBox = new QDoubleSpinBox;
+	leftBox->setKeyboardTracking(false);
+
+	rightBox = new QDoubleSpinBox;
+	rightBox->setKeyboardTracking(false);
+
+	bottomBox = new QDoubleSpinBox;
+	bottomBox->setKeyboardTracking(false);
+
+	topBox = new QDoubleSpinBox;
+	topBox->setKeyboardTracking(false);
 
 	drawBox = new QComboBox;
 	drawBox->addItem("GL_TRIANGLES");
@@ -51,19 +79,27 @@ GLGeneralTab::GLGeneralTab(QWidget* parent) : QWidget(parent)
 	connect(msaaBox, SIGNAL(clicked(bool)), this, SLOT(MSAAChanged(bool)));
 
 	mainLayout->addWidget(widthLabel, 0, 0);
-	mainLayout->addWidget(widthBox, 0, 1);
+	mainLayout->addWidget(widthBox, 0, 1, 1, 7);
 	mainLayout->addWidget(heightLabel, 1, 0);
-	mainLayout->addWidget(heightBox, 1, 1);
-	mainLayout->addWidget(drawLabel, 2, 0);
-	mainLayout->addWidget(drawBox, 2, 1);
-	mainLayout->addWidget(colourLabel, 3, 0);
-	mainLayout->addWidget(colourBox, 3, 1);
-	mainLayout->addWidget(vsyncLabel, 4, 0);
-	mainLayout->addWidget(vsyncBox, 4, 1);
-	mainLayout->addWidget(msaaLabel, 5, 0);
-	mainLayout->addWidget(msaaBox, 5, 1);
-	mainLayout->addWidget(fovLabel, 6, 0);
-	mainLayout->addWidget(fovBox, 6, 1);
+	mainLayout->addWidget(heightBox, 1, 1, 1, 7);
+	mainLayout->addWidget(projMatrixLabel, 2, 0);
+	mainLayout->addWidget(projMatrixBox, 2, 1, 1, 7);
+	mainLayout->addWidget(fovLabel, 3, 0);
+	mainLayout->addWidget(fovBox, 3, 1);
+	mainLayout->addWidget(aspectLabel, 3, 2);
+	mainLayout->addWidget(aspectBox, 3, 3);
+	mainLayout->addWidget(nearLabel, 3, 4);
+	mainLayout->addWidget(nearBox, 3, 5);
+	mainLayout->addWidget(farLabel, 3, 6);
+	mainLayout->addWidget(farBox, 3, 7);
+	mainLayout->addWidget(drawLabel, 4, 0);
+	mainLayout->addWidget(drawBox, 4, 1, 1, 7);
+	mainLayout->addWidget(colourLabel, 5, 0);
+	mainLayout->addWidget(colourBox, 5, 1, 1, 7);
+	mainLayout->addWidget(vsyncLabel, 6, 0);
+	mainLayout->addWidget(vsyncBox, 6, 1, 1, 7);
+	mainLayout->addWidget(msaaLabel, 7, 0);
+	mainLayout->addWidget(msaaBox, 7, 1, 1, 7);
 
 	setLayout(mainLayout);
 }
@@ -97,12 +133,6 @@ void GLGeneralTab::HeightChanged(int i)
 {
 	QMessageBox::information(this, "Changed", "Height Changed");
 	GLWidget::Resize(GLWidget::Width(), i);
-}
-
-void GLGeneralTab::FOVChanged(int i)
-{
-	QMessageBox::information(this, "Changed", "FOV Changed");
-	GLWidget::FOV(i);
 }
 
 void GLGeneralTab::ProjMatrixChanged(int i)

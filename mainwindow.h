@@ -15,6 +15,7 @@
 #include "glwidget.h"
 #include "glsettings.h"
 #include "cusettings.h"
+#include "outputsettings.h"
 #include "utilities.h"
 
 namespace Ui
@@ -42,6 +43,7 @@ private:
 	QVBoxLayout *mainLayout, *openglLayout, *cudaLayout;
 	GLSettings* openglSettings;
 	CUSettings* cudaSettings;
+	OutputSettings *outputSettings;
 	GLWidget* gl;
 	QTabWidget *openglTabs, *cudaTabs;
 	QSizePolicy top, bottom;
@@ -51,6 +53,7 @@ private:
 	void on_actionOpenGL_triggered(bool checked);
 	void on_actionOpenGL_2_triggered(bool checked);
 	void on_actionCUDA_triggered(bool checked);
+	void on_actionOutput_triggered(bool checked);
 };
 
 #endif // MAINWINDOW_H

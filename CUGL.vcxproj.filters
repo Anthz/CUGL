@@ -44,12 +44,12 @@
       <ParseFiles>false</ParseFiles>
     </Filter>
     <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{c278cda5-a64b-4220-baf8-3deeb49a3b37}</UniqueIdentifier>
+      <UniqueIdentifier>{4f20f423-8ec3-46e5-b449-e1c19c55c582}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{554785b5-99a1-4fa0-9a92-5bb627930d7a}</UniqueIdentifier>
+      <UniqueIdentifier>{0ae53dc4-ffc2-44ab-94cf-f2eab60c0a14}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
@@ -118,7 +118,13 @@
     <ClCompile Include="texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="texturepopup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="texturetab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Debug\moc_bufferpopup.cpp">
@@ -205,14 +211,17 @@
     <ClCompile Include="Release\moc_paramtab.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\moc_texturepopup.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_texturepopup.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
     <ClCompile Include="Debug\moc_texturetab.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Release\moc_texturetab.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="utilities.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -276,9 +285,15 @@
     <ClInclude Include="texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <CustomBuild Include="texturepopup.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
     <CustomBuild Include="texturetab.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <ClInclude Include="utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <CustomBuild Include="Kernels\kernel.cu" />
   </ItemGroup>
   <ItemGroup>
@@ -299,9 +314,6 @@
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h">
       <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

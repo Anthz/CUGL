@@ -14,6 +14,7 @@
 
 #include "cuglbuffer.h"
 #include "shader.h"
+#include "texture.h"
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -41,8 +42,11 @@ public:
 	static void Play(bool b);
 	static QMatrix4x4 *ProjMatrix();
 	static QMatrix4x4 *ViewMatrix();
+	static void CheckFBOStatus();
+	static int SetFBOTexture(GLuint id);
 
 	static std::vector<Shader*> ShaderList;
+	static std::vector<GLuint> FBOList;
 
 	QSize minimumSizeHint() const;
 	QSize sizeHint() const;
@@ -56,7 +60,6 @@ private:
 	QTime timer;
 	int width, height;
 	QOpenGLFunctions_3_3_Core* glFuncs;
-	QOpenGLTexture *texture;
 	bool play;
 
 signals:

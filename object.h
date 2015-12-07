@@ -23,11 +23,15 @@ public:
 	Texture *texture;
 	Shader *shader;
 
+	int FBO() const { return fbo; }
+	void FBO(int val) { fbo = val; }
+
 private:
 	QOpenGLFunctions_3_3_Core* glFuncs;
 
 	QMatrix4x4 modelMatrix;
 	GLuint vao, mLoc, vLoc, pLoc;
+	int fbo;
 	bool instanced;
 };
 

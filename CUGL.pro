@@ -35,6 +35,8 @@ SOURCES += main.cpp\
         cusettings.cpp \
 		texturetab.cpp \
 		texture.cpp \
+		texturepopup.cpp \
+		utilities.cpp \
 
 HEADERS  += mainwindow.h \
             glwidget.h \
@@ -57,6 +59,8 @@ HEADERS  += mainwindow.h \
             cusettings.h \
 			texturetab.h \
 			texture.h \
+			texturepopup.h \
+			utilities.h \
 
 FORMS    += mainwindow.ui
 
@@ -111,7 +115,7 @@ CONFIG(debug, debug|release) {
     cuda_d.output   = $$CUDA_OBJECTS_DIR/${QMAKE_FILE_BASE}_cuda.obj
     cuda_d.commands = $$NVCC_FORMATTED -D_DEBUG $$NVCC_OPTIONS $$CUDA_INC $$LIBS \
                       --machine $$SYSTEM_TYPE -arch=$$CUDA_ARCH \
-                      --compile -cudart static -g -DWIN32 -D_MBCS \
+                      --compile -cudart static -g -G -DWIN32 -D_MBCS \
                       -Xcompiler "/wd4819,/EHsc,/W3,/nologo,/Od,/Zi,/RTC1" \
                       -Xcompiler $$MSVCRT_LINK_FLAG_DEBUG \
                       -c -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}

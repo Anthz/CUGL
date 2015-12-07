@@ -87,7 +87,12 @@ void TextureTab::RemoveTexture()
 {
 	if(!GLSettings::TextureList.empty() && listView->currentIndex().row() != -1)
 	{
+
 		QString name = GLSettings::TextureList.at(listView->currentIndex().row())->Name();
+		bool b = GLSettings::TextureList.at(listView->currentIndex().row())->FBO();
+		int fboID = -1;
+		if(b)
+			fboID = GLSettings::TextureList.at(listView->currentIndex().row())->FBOID();
 
 		for(int i = 0; i < GLSettings::TextureList.size(); ++i)
 		{
@@ -98,6 +103,18 @@ void TextureTab::RemoveTexture()
 			}
 		}
 
+		if(b)
+		{
+			for(int i = 0; i < GLWidget::FBOList.size(); ++i)
+			{
+				if(GLWidget::FBOList.at(i) == fboID)
+				{
+					GLWidget::FBOList.erase(GLWidget::FBOList.begin() + i);
+					--i;
+				}
+			}
+		}
+
 		textureStringList.erase(textureStringList.begin() + listView->currentIndex().row());
 		listModel->setStringList(textureStringList);
 	}
@@ -105,18 +122,8 @@ void TextureTab::RemoveTexture()
 
 void TextureTab::Popup()
 {
-	QString s = QFileDialog::getOpenFileName(this, "Open Image File", QDir::currentPath(), "Image Files (*.png *.jpg *.bmp)");
-	if(s.size() == 0)
-		return; //cancelled
-
-	int nameBegin = s.lastIndexOf("/") + 1;
-	//int nameEnd = s.lastIndexOf(".") + 1; //to remove extension
-
-	QString name = s.right(s.length() - nameBegin);
-
-	Texture *t = new Texture(name, s);
-	GLSettings::TextureList.push_back(t);
-	AddToList(t);
+	TexturePopup p(this);
+	p.exec();
 }
 
 /*bool ImageViewer::loadFile(const QString &fileName)

@@ -120,19 +120,6 @@ bool CUGLBuffer::InitVBO()
 	return true;
 }
 
-void CUGLBuffer::InitTex()
-{
-	glFuncs->glGenTextures(1, &tex);
-	glFuncs->glBindTexture(GL_TEXTURE_2D, tex);
-
-	glFuncs->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, img.width(), img.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
-
-	//glFuncs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); scale to window size?
-	//glFuncs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glFuncs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glFuncs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-}
-
 void CUGLBuffer::Randomise(float *data, int n) {
 	for(int i = 0; i < n; i++) {
 		data[i] = 2.0f * (rand() / (float)RAND_MAX) - 1.0f;
@@ -148,6 +135,7 @@ std::vector<QString> &split(const std::string &s, char delim, std::vector<QStrin
     return elems;
 }
 
+//implement custom parser
 void CUGLBuffer::ParseFile(float *data)
 {
 	std::ifstream in(bDataPath.toStdString());
@@ -184,6 +172,7 @@ bool CUGLBuffer::LoadData()
 			ParseFile((float*)bData);
 		break;
 	}
+	/*use texture selector instead
 	case GL_PIXEL_UNPACK_BUFFER:
 	{
 		//change to texture selector or accept nullptr
@@ -194,7 +183,7 @@ bool CUGLBuffer::LoadData()
 		bData = (void*)img.constBits();
 		InitTex();
 		break;
-	}
+	}*/
 	}
 
 	return true;
@@ -205,40 +194,34 @@ void CUGLBuffer::Bind()
 	glFuncs->glBindBuffer(bTarget.first, buf);
 }
 
+void CUGLBuffer::Unbind()
+{
+	glFuncs->glBindBuffer(bTarget.first, 0);
+}
+
 void* CUGLBuffer::RegisterBuffer(GLuint buf)
 {
 	cudaGraphicsResource* res = 0;
-	if(cudaGraphicsGLRegisterBuffer(&res, buf, cudaGraphicsRegisterFlagsNone) != cudaSuccess)
-		printf("Failed to register buffer %u\n", buf);
+	ERRORCHECK(cudaGraphicsGLRegisterBuffer(&res, buf, cudaGraphicsRegisterFlagsNone));
 	return res;
 }
 
 void CUGLBuffer::UnregisterBuffer(void* res)
 {
-	if(cudaGraphicsUnregisterResource((cudaGraphicsResource *)res) != cudaSuccess)
-		puts("Failed to unregister resource for buffer");
+	ERRORCHECK(cudaGraphicsUnregisterResource((cudaGraphicsResource *)res));
 }
 
 void* CUGLBuffer::MapResource(void* res)
 {
-	if(cudaGraphicsMapResources(1, (cudaGraphicsResource **)&res) != cudaSuccess)
-	{
-		puts("Failed to map resource");
-		return 0;
-	}
 	void* devPtr = 0;
 	size_t size;
-	if(cudaGraphicsResourceGetMappedPointer(&devPtr, &size, (cudaGraphicsResource *)res) != cudaSuccess)
-	{
-		puts("Failed to get device pointer");
-		return 0;
-	}
+	ERRORCHECK(cudaGraphicsMapResources(1, (cudaGraphicsResource **)&res));
+	ERRORCHECK(cudaGraphicsResourceGetMappedPointer(&devPtr, &size, (cudaGraphicsResource *)res));
 	return devPtr;
 }
 
 void CUGLBuffer::UnmapResource(void* res)
 {
-	if(cudaGraphicsUnmapResources(1, (cudaGraphicsResource **)&res) != cudaSuccess)
-		puts("Failed to unmap resource");
+	ERRORCHECK(cudaGraphicsUnmapResources(1, (cudaGraphicsResource **)&res));
 }
 

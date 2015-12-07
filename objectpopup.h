@@ -32,10 +32,12 @@ private:
 
 	QGridLayout* mainLayout;
 	QLabel *nameLabel, *instancesLabel,
-		*bufferLabel, *textureLabel, *shaderLabel;
+		*bufferLabel, *textureLabel,
+		*shaderLabel, *fboLabel;
 	QLineEdit* nameBox;
 	QSpinBox* instancesBox;
-	QComboBox *bufferBox, *textureBox, *shaderBox;
+	QComboBox *bufferBox, *textureBox,
+		*shaderBox, *fboBox;
 
 	QDialogButtonBox* buttons;
 	QStandardItemModel* bufferBoxModel;

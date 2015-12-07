@@ -69,6 +69,13 @@ BufferPopup::BufferPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 	dataBox = new QLineEdit;
 	dataBox->installEventFilter(this);
 
+	textureBox = new QComboBox;
+	for(int i = 0; i < GLSettings::TextureList.size(); ++i)
+	{
+		textureBox->addItem(GLSettings::TextureList.at(i)->Name());
+	}
+	textureBox->hide();
+
 	usageBox = new QComboBox;
 	usageBox->addItem("GL_DYNAMIC_DRAW");
 	usageBox->addItem("GL_DYNAMIC_COPY");
@@ -107,6 +114,7 @@ BufferPopup::BufferPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 	mainLayout->addWidget(capacityBox, 2, 1);
 	mainLayout->addWidget(dataLabel, 3, 0);
 	mainLayout->addWidget(dataPickerBox, 3, 1);
+	mainLayout->addWidget(textureBox, 3, 1);
 	mainLayout->addWidget(dataBox, 4, 1);
 	mainLayout->addWidget(usageLabel, 5, 0);
 	mainLayout->addWidget(usageBox, 5, 1);
@@ -170,6 +178,8 @@ BufferPopup::~BufferPopup()
 
 	delete nameBox;
 	delete dataPickerBox;
+	delete dataBox;
+	delete textureBox;
 	delete attribNameBox;
 	delete capacityBox;
 	delete attribCapacityBox;
@@ -225,7 +235,7 @@ bool BufferPopup::Validation()
 
 bool BufferPopup::eventFilter(QObject* object, QEvent* event)
 {
-	if(object == dataBox && event->type() == QEvent::MouseButtonPress)
+	if(object == dataBox && event->type() == QEvent::MouseButtonDblClick)
 	{
 		CustomDataClicked();
 		return true; //stops event continuing
@@ -251,18 +261,25 @@ void BufferPopup::TargetChanged(int i)
 		case 0:
 		{
 			dataLabel->setText("Data:");
+			dataPickerBox->show();
+			dataBox->show();
 
 			capacityLabel->show();
 			capacityBox->show();
+
+			textureBox->hide();
 			break;
 		}
 		case 1:
 		{
-			dataLabel->setText("Image:");
+			dataLabel->setText("Texture:");
+			dataPickerBox->hide();
+			dataBox->hide();
 
 			capacityLabel->hide();
 			capacityBox->hide();
-			capacityBox->setValue(1);
+
+			textureBox->show();
 			break;
 		}
 	}
@@ -289,23 +306,28 @@ void BufferPopup::SetTarget()
 
 void BufferPopup::SetData()
 {
-	switch(dataPickerBox->currentIndex())
+	if(targetBox->currentIndex() == 0)
 	{
-		case 0:
+		switch(dataPickerBox->currentIndex())
 		{
-			break;
+			case 1:
+			{
+				data = quad;
+				break;
+			}
+			case 2:
+			{
+				data = quadUV;
+				break;
+			}
 		}
-		case 1:
-		{
-			data = quad;
-			break;
-		}
-		case 2:
-		{
-			data = quadUV;
-			break;
-		}
-	}	
+	}
+	else
+	{
+		Texture *t = GLSettings::TextureList.at(textureBox->currentIndex());
+		capacityBox->setValue(t->ImageSize().width() * t->ImageSize().height() * 4);
+		data = (void*)t->Image().constBits();
+	}
 }
 
 void BufferPopup::DataChanged(int i)
@@ -355,24 +377,8 @@ void BufferPopup::DataChanged(int i)
 void BufferPopup::CustomDataClicked()
 {
 	QString s;
-	QString title;
-	QString filter;
-
-	switch(targetBox->currentIndex())
-	{
-		case 0:	//GL_ARRAY_BUFFER
-		{
-			title = "Open Data File";
-			filter = "";
-			break;
-		}
-		case 1:	//GL_PIXEL_UNPACK_BUFFER
-		{
-			title = "Open Image File";
-			filter = "Image Files (*.png *.jpg *.bmp)";
-			break;
-		}
-	}
+	QString title = "Open Data File";
+	QString filter = "";
 		
 	s = QFileDialog::getOpenFileName(this, title, QDir::currentPath(), filter);
 	if(s.size() == 0)

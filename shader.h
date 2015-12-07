@@ -3,6 +3,8 @@
 
 #include <QOpenGLShaderProgram>
 
+#include "utilities.h"
+
 class Shader
 {
 public:

@@ -11,29 +11,41 @@
 class Texture
 {
 public:
-	Texture(QString name, QString path, GLenum target = GL_TEXTURE_2D, GLint minMagFilter = GL_LINEAR, GLint wrapMode = GL_CLAMP_TO_EDGE);
+	Texture(QString name, QString path, QImage image, int width, int height, std::pair<GLenum, QString> target, std::pair<GLint, QString> minMagFilter, std::pair<GLint, QString> wrapMode, bool fbo);
+	Texture(QString name, int width, int height, std::pair<GLenum, QString> target, std::pair<GLint, QString> minMagFilter, std::pair<GLint, QString> wrapMode, bool fbo);
 	~Texture();
 
 	void Bind();
 	void Unbind();
 
 	QString Name() const { return name; }
-	void Name(QString val) { name = val; }
-
+	QString DataPath() const { return dataPath; }
 	QImage Image() const { return image; }	//pass ref	
 	QSize ImageSize() const { return imageSize; }
-	GLenum Target() const { return target; }
-	GLint MinMagFilter() const { return minMagFilter; }
-	GLint WrapMode() const { return wrapMode; }
+	std::pair<GLenum, QString> Target() const { return target; }
+	std::pair<GLenum, QString> MinMagFilter() const { return minMagFilter; }
+	std::pair<GLenum, QString> WrapMode() const { return wrapMode; }
+	bool FBO() const { return fbo; }
+	int FBOID() const { return fboID; }
 
+	void Name(QString val) { name = val; }
+	void DataPath(QString val) { dataPath = val; }
+	void Image(QImage val) { image = val; }
+	void ImageSize(QSize val) { imageSize = val; }
+	void Target(std::pair<GLenum, QString> val) { target = val; }
+	void MinMagFilter(std::pair<GLenum, QString> val) { minMagFilter = val; }
+	void WrapMode(std::pair<GLenum, QString> val) { wrapMode = val; }
+	void FBO(int val) { fbo = val; }
 private:
-	QString name;
+	QString name, dataPath;
 	GLuint texID;
 	QImage image;
 	QSize imageSize;
 	const void *data;
-	GLenum target;
-	GLint minMagFilter, wrapMode;
+	std::pair<GLenum, QString> target;
+	std::pair<GLenum, QString> minMagFilter, wrapMode;
+	bool fbo;
+	int fboID;
 
 	QOpenGLFunctions_3_3_Core *glFuncs;
 };

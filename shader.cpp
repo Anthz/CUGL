@@ -27,7 +27,11 @@ Shader::Shader(QString name, QString vertPath, QString fragPath)
 	bool result;
 	program = new QOpenGLShaderProgram();
 	result = program->addShaderFromSourceFile(QOpenGLShader::Vertex, vertPath);
+	if(!result)
+		Logger::Log(program->log().toStdString());
 	result = program->addShaderFromSourceFile(QOpenGLShader::Fragment, fragPath);
+	if(!result)
+		Logger::Log(program->log().toStdString());
 	//result = program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
 	//result = program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
 	result = program->link();

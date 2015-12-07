@@ -45,7 +45,7 @@ private:
 	//*handledLabel;
 	QLineEdit *nameBox, *dataBox, *attribNameBox;
 	QSpinBox *capacityBox, *attribCapacityBox;
-	QComboBox *targetBox, *dataPickerBox, *usageBox, *typeBox;
+	QComboBox *targetBox, *dataPickerBox, *textureBox, *usageBox, *typeBox;
 	QCheckBox* normalisedBox; //*handledBox;
 	QDialogButtonBox* buttons;
 

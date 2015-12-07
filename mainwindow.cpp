@@ -13,8 +13,8 @@ ui(new Ui::MainWindow)
 	settingsSplitter = new QSplitter();
 
 	top = QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-	top.setVerticalStretch(2.5);
-	bottom = QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	top.setVerticalStretch(3);
+	bottom = QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 	bottom.setVerticalStretch(1);
 	bottom.setHorizontalStretch(1);
 
@@ -58,7 +58,7 @@ MainWindow::~MainWindow()
 
 QSize MainWindow::sizeHint() const
 {
-	return QSize(800, 800);
+	return QSize(1200, 900);
 }
 
 void MainWindow::InitOpenGLWidget()
@@ -70,13 +70,17 @@ void MainWindow::InitOpenGLWidget()
 
 void MainWindow::InitSettings()
 {
-	openglSettings = new GLSettings();
+	//fix weighting
+	openglSettings = new GLSettings(this);
 	openglSettings->setSizePolicy(bottom);
-	cudaSettings = new CUSettings();
+	cudaSettings = new CUSettings(this);
 	cudaSettings->setSizePolicy(bottom);
+	outputSettings = new OutputSettings(this);
+	outputSettings->setSizePolicy(bottom);
 
 	settingsSplitter->addWidget(openglSettings);
 	settingsSplitter->addWidget(cudaSettings);
+	settingsSplitter->addWidget(outputSettings);
 	settingsSplitter->setSizePolicy(bottom);
 
 	mainSplitter->addWidget(settingsSplitter);
@@ -100,5 +104,10 @@ void MainWindow::on_actionOpenGL_2_triggered(bool checked)
 void MainWindow::on_actionCUDA_triggered(bool checked)
 {
 	cudaSettings->setHidden(!checked);
+}
+
+void MainWindow::on_actionOutput_triggered(bool checked)
+{
+	outputSettings->setHidden(!checked);
 }
 
