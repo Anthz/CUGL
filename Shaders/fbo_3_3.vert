@@ -7,6 +7,6 @@ out mediump vec2 texCoords;
 
 void main()
 {
-   texCoords = aUV;
-   gl_Position = vec4(aPos, 1.0);
+   texCoords = vec2(aUV.x, 1 - aUV.y);
+   gl_Position = vec4(aPos * 2.0, 1.0);
 }

@@ -81,8 +81,8 @@ CUGLBuffer::~CUGLBuffer()
 	if(tex)
 		glFuncs->glDeleteTextures(1, &tex);
 
-	if(buf)
-		glFuncs->glDeleteBuffers(1, &buf);
+	if(bufID)
+		glFuncs->glDeleteBuffers(1, &bufID);
 }
 
 /*  Screen aligned quad
@@ -111,11 +111,11 @@ w, h, w, h,
 ************************************************************************/
 bool CUGLBuffer::InitVBO()
 {
-	glFuncs->glGenBuffers(1, &buf);
-	glFuncs->glBindBuffer(bTarget.first, buf);
-	glFuncs->glBufferData(bTarget.first, bSize, bData, bUsage.first);
+	glFuncs->glGenBuffers(1, &bufID);
+	glFuncs->glBindBuffer(bTarget.first, bufID);
+	glFuncs->glBufferData(bTarget.first, bSize, bData, bUsage.first);	//bData?
 
-	cudaBuf = RegisterBuffer(buf);
+	cudaBuf = RegisterBuffer(bufID);
 
 	return true;
 }
@@ -191,7 +191,7 @@ bool CUGLBuffer::LoadData()
 
 void CUGLBuffer::Bind()
 {
-	glFuncs->glBindBuffer(bTarget.first, buf);
+	glFuncs->glBindBuffer(bTarget.first, bufID);
 }
 
 void CUGLBuffer::Unbind()

@@ -57,7 +57,7 @@ BufferPopup::BufferPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 
 	capacityBox = new QSpinBox;
 	capacityBox->setMinimum(1);
-	capacityBox->setMaximum(999999);
+	capacityBox->setMaximum(INT_MAX);
 	capacityBox->setKeyboardTracking(false);
 
 	dataPickerBox = new QComboBox;
@@ -326,7 +326,7 @@ void BufferPopup::SetData()
 	{
 		Texture *t = GLSettings::TextureList.at(textureBox->currentIndex());
 		capacityBox->setValue(t->ImageSize().width() * t->ImageSize().height() * 4);
-		data = (void*)t->Image().constBits();
+		data = (void*)t->Data();
 	}
 }
 
@@ -478,10 +478,12 @@ void BufferPopup::Save()
 		{
 			CUGLBuffer* b;
 
-			if(dataPickerBox->currentIndex() == 0)
+			if(dataPickerBox->isVisible() && dataPickerBox->currentIndex() == 0)
 				b = new CUGLBuffer(name, capacity, target, dataPath, usage, aID, aCapacity, type, norm);
 			else
 				b = new CUGLBuffer(name, capacity, target, data, usage, aID, aCapacity, type, norm);
+			if(targetBox->currentIndex() == 1)
+				GLSettings::TextureList.at(textureBox->currentIndex())->PBO(b->bufID);
 			GLSettings::BufferList.push_back(b);
 			static_cast<GLBufferTab*>(parent())->AddToTable(b);
 		}

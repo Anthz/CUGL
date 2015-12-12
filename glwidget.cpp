@@ -52,27 +52,29 @@ void GLWidget::initializeGL()
 	width = QWidget::width();
 	height = QWidget::height();
 	
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LESS);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LESS);
 
 	glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBlendEquation(GL_ADD);
+	//glBlendEquation(GL_ADD);
 
 	//glEnable(GL_CULL_FACE);
 	//glCullFace(GL_BACK);
 
 	//configure working directory correctly (./ in VS, ../ otherwise)
-    Shader *shader = new Shader("Textured Particle Shader", "./Shaders/t_bb_Particle_3_3.vert", "./Shaders/t_bb_Particle_3_3.frag");
+    //Shader *shader = new Shader("Textured Particle Shader", "./Shaders/t_bb_Particle_3_3.vert", "./Shaders/t_bb_Particle_3_3.frag");
+	Shader *shader = new Shader("Textured Particle Shader", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/t_bb_Particle_3_3.vert", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/t_bb_Particle_3_3.frag");
 	ShaderList.push_back(shader);
 
-	Shader *shader2 = new Shader("Particle Shader", "./Shaders/bb_Particle_3_3.vert", "./Shaders/bb_Particle_3_3.frag");
+	Shader *shader2 = new Shader("Particle Shader", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/bb_Particle_3_3.vert", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/bb_Particle_3_3.frag");
 	ShaderList.push_back(shader2);
 
-	Shader *shader3 = new Shader("Simple Shader", "./Shaders/simple_3_3.vert", "./Shaders/simple_3_3.frag");
+	Shader *shader3 = new Shader("Simple Shader", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/simple_3_3.vert", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/simple_3_3.frag");
 	ShaderList.push_back(shader3);
 
-	Shader *shader4 = new Shader("FBO Shader", "./Shaders/fbo_3_3.vert", "./Shaders/fbo_3_3.frag");
+	Shader *shader4 = new Shader("FBO Shader", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/fbo_3_3.vert", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/fbo_3_3.frag");
 	ShaderList.push_back(shader4);
 
 	int r, g, b, a;
@@ -88,10 +90,33 @@ void GLWidget::paintGL()
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//render to FBO
+	//update
+	//render FBO tex to screen
+	//render other objs to screen
 	if(play)
 	{
 		if(GLSettings::ObjectList.size() > 0)
 		{
+			if(FBOList.size() > 0)
+			{
+				glBindFramebuffer(GL_FRAMEBUFFER, FBOList.at(0));	//hardcoded for 1 FBO
+				glViewport(0, 0, width, height);
+
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				for each (Object *o in GLSettings::ObjectList)
+				{
+					if(o->FBO() == FBOList.at(0))
+					{
+						o->Draw(drawMode, false);
+					}
+				}
+
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+				glViewport(0, 0, width, height);
+			}
+
 			std::vector<void*> params;
 
 			for(int i = 0; i < GLSettings::BufferList.size(); ++i)
@@ -114,31 +139,11 @@ void GLWidget::paintGL()
 				}
 			}
 
-			if(FBOList.size() > 0)
-			{
-				glBindFramebuffer(GL_FRAMEBUFFER, FBOList.at(0));	//hardcoded for 1 FBO
-				glViewport(0, 0, 1024, 1024);
-
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-				for each (Object *o in GLSettings::ObjectList)
-				{
-					if(o->FBO() == FBOList.at(0))
-					{
-						o->Draw(drawMode, false);
-					}
-				}
-
-				glBindFramebuffer(GL_FRAMEBUFFER, 0);
-				glViewport(0, 0, width, height);
-			}
-
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			for each (Object *o in GLSettings::ObjectList)
 			{
-				o->Draw(drawMode, false);
-				
+				o->Draw(drawMode, false);	
 			}
 
 			update();
@@ -269,7 +274,7 @@ int GLWidget::SetFBOTexture(GLuint id)
 	glPtr->glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glPtr->glGenRenderbuffers(1, &rbo);
 	glPtr->glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-	glPtr->glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1024, 1024);
+	glPtr->glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, Width(), Height());	//Width(), Height()
 	glPtr->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo);
 	glPtr->glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, id, 0);
 
@@ -280,6 +285,9 @@ int GLWidget::SetFBOTexture(GLuint id)
 	CheckFBOStatus();
 
 	glPtr->FBOList.push_back(fbo);
+	 
+	glPtr->glClearColor(0.0, 0.0, 0.0, 1.0);
+	glPtr->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//first clear to ensure drawing
 
 	glPtr->glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -373,9 +381,9 @@ void GLWidget::resizeGL(int w, int h)
 	float ratio = (float)width / (float)height;
 
 	projMatrix->setToIdentity();
-	projMatrix->ortho(-25e10 * ratio, 25e10 * ratio, -25e10, 25e10, 0.1f, 10000.0f);
+	//projMatrix->ortho(-25e10 * ratio, 25e10 * ratio, -25e10, 25e10, 0.1f, 10000.0f);
 	//projMatrix->ortho(-0.5f, 0.5f, -0.5f, 0.5f, 0.1f, 1000.0f);
-	//projMatrix->perspective(45.0f, ratio, 0.1f, 1000.0f);
+	projMatrix->perspective(45.0f, ratio, 0.1f, 1000.0f);
 }
 
 void GLWidget::UpdateFPS()

@@ -1,4 +1,5 @@
 #include "object.h"
+#include "glsettings.h"
 
 Object::Object(QString name, int instances, std::vector<CUGLBuffer*> buffers, Texture *texture, Shader *shader)
 {
@@ -84,7 +85,16 @@ void Object::Draw(GLenum drawMode, bool wireframe)
 	glFuncs->glBindVertexArray(vao);
 
 	if(texture != nullptr)
+	{
 		texture->Bind();
+		if(texture->PBO() != -1)
+		{
+			glFuncs->glBindBuffer(GL_PIXEL_UNPACK_BUFFER, texture->PBO());
+			glFuncs->glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, texture->ImageSize().width(), texture->ImageSize().height(),
+				GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+			glFuncs->glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+		}
+	}
 
 	//glFuncs->glDrawArrays(drawMode, 0, buffers.at(0)->bCap / buffers.at(0)->aSize);
 	glFuncs->glDrawArraysInstanced(drawMode, 0, buffers.at(0)->bCap / buffers.at(0)->aSize, instances);

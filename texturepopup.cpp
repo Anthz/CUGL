@@ -34,17 +34,17 @@ TexturePopup::TexturePopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHin
 	dataBox->installEventFilter(this);
 
 	widthBox = new QSpinBox;
-	widthBox->setMinimum(1);
+	widthBox->setMinimum(0);
 	widthBox->setMaximum(9999);
 	widthBox->setKeyboardTracking(false);
 
 	heightBox = new QSpinBox;
-	heightBox->setMinimum(1);
+	heightBox->setMinimum(0);
 	heightBox->setMaximum(9999);
 	heightBox->setKeyboardTracking(false);
 
 	depthBox = new QSpinBox;
-	depthBox->setMinimum(1);
+	depthBox->setMinimum(0);
 	depthBox->setMaximum(9999);
 	depthBox->setKeyboardTracking(false);
 
@@ -352,8 +352,16 @@ void TexturePopup::Save()
 
 		QString name = nameBox->text();
 		QString dataPath = dataBox->text();
+
+		//default to full res
 		int width = widthBox->value();
+		if(width == 0)
+			width = GLWidget::Width();
+
 		int height = heightBox->value();
+		if(height == 0)
+			height = GLWidget::Height();
+
 		bool fbo = fboBox->isChecked();
 
 		if(!append)

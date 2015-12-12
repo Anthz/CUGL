@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{32B69571-F7EC-3B0A-8372-CF7ABCD43161}</ProjectGuid>
+    <ProjectGuid>{542D2B32-3337-39AE-9735-4C0B989A3A7E}</ProjectGuid>
     <RootNamespace>CUGL</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
   </PropertyGroup>
@@ -605,7 +605,7 @@ endlocal
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Kernels\kernel.cu;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
 if errorlevel 1 goto VCEnd
-"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/bin/nvcc" --use_fast_math -I"D:/GitHub/CUGL/" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/include" -lcuda -lcudart --machine 64 -arch=sm_35 --compile -cudart static -DWIN32 -D_MBCS -Xcompiler /wd4819,/EHsc,/W3,/nologo,/O2,/Zi -Xcompiler /MD -c -o debug\obj\kernel_cuda.obj Kernels\kernel.cu
+"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/bin/nvcc" --use_fast_math -I"C:/Users/Anth/Documents/GitHub/CUGL/" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/include" -lcuda -lcudart --machine 64 -arch=sm_35 --compile -cudart static -DWIN32 -D_MBCS -Xcompiler /wd4819,/EHsc,/W3,/nologo,/O2,/Zi -Xcompiler /MD -c -o debug\obj\kernel_cuda.obj Kernels\kernel.cu
 if errorlevel 1 goto VCEnd
 endlocal</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"C:/Program</Message>
@@ -617,7 +617,7 @@ endlocal</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Kernels\kernel.cu;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
 if errorlevel 1 goto VCEnd
-"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/bin/nvcc" -D_DEBUG --use_fast_math -I"D:/GitHub/CUGL/" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/include" -lcuda -lcudart --machine 64 -arch=sm_35 --compile -cudart static -g -G -DWIN32 -D_MBCS -Xcompiler /wd4819,/EHsc,/W3,/nologo,/Od,/Zi,/RTC1 -Xcompiler /MDd -c -o debug\obj\kernel_cuda.obj Kernels\kernel.cu
+"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/bin/nvcc" -D_DEBUG --use_fast_math -I"C:/Users/Anth/Documents/GitHub/CUGL/" -I"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/include" -lcuda -lcudart --machine 64 -arch=sm_35 --compile -cudart static -g -G -DWIN32 -D_MBCS -Xcompiler /wd4819,/EHsc,/W3,/nologo,/Od,/Zi,/RTC1 -Xcompiler /MDd -c -o debug\obj\kernel_cuda.obj Kernels\kernel.cu
 if errorlevel 1 goto VCEnd
 endlocal</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"C:/Program</Message>

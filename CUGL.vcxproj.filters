@@ -44,12 +44,12 @@
       <ParseFiles>false</ParseFiles>
     </Filter>
     <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{4f20f423-8ec3-46e5-b449-e1c19c55c582}</UniqueIdentifier>
+      <UniqueIdentifier>{5ff8a653-a367-4660-9a27-27cf7b8d218c}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
     <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{0ae53dc4-ffc2-44ab-94cf-f2eab60c0a14}</UniqueIdentifier>
+      <UniqueIdentifier>{c27b95d4-e4c3-47a3-9bc3-6d0f43086709}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>

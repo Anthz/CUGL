@@ -42,6 +42,7 @@ public:
 	int ParamID() const { return paramID; }
 	void ParamID(int val) { paramID = val; }
 
+	GLuint bufID;
 	QString bName, bDataPath;
 	void *bData;
 	int bCap, bSize, aSize;
@@ -57,7 +58,7 @@ private:
 	bool LoadData();
 
 	QOpenGLFunctions_3_3_Core* glFuncs;
-	GLuint buf, tex;
+	GLuint tex;
 	void *cudaBuf;
 	QImage img;
 	QSize texSize;

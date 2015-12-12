@@ -27,6 +27,9 @@ public:
 	std::pair<GLenum, QString> WrapMode() const { return wrapMode; }
 	bool FBO() const { return fbo; }
 	int FBOID() const { return fboID; }
+	int PBO() const { return pbo; }
+	const void *Data() const { return data; }
+
 
 	void Name(QString val) { name = val; }
 	void DataPath(QString val) { dataPath = val; }
@@ -35,7 +38,8 @@ public:
 	void Target(std::pair<GLenum, QString> val) { target = val; }
 	void MinMagFilter(std::pair<GLenum, QString> val) { minMagFilter = val; }
 	void WrapMode(std::pair<GLenum, QString> val) { wrapMode = val; }
-	void FBO(int val) { fbo = val; }
+	void FBO(int val) { fbo = val; }	
+	void PBO(int val) { pbo = val; }
 private:
 	QString name, dataPath;
 	GLuint texID;
@@ -46,6 +50,7 @@ private:
 	std::pair<GLenum, QString> minMagFilter, wrapMode;
 	bool fbo;
 	int fboID;
+	int pbo;
 
 	QOpenGLFunctions_3_3_Core *glFuncs;
 };

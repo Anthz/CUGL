@@ -5,6 +5,7 @@ Texture::Texture(QString name, QString path, QImage image, int width, int height
 {
 	glFuncs = 0;
 	fboID = 0;
+	pbo = -1;
 	//QImageReader reader(path);
 	//reader.setAutoTransform(true);
 	this->image = image;
@@ -54,7 +55,8 @@ Texture::Texture(QString name, int width, int height, std::pair<GLenum, QString>
 {
 	glFuncs = 0;
 	fboID = 0;
- 
+	pbo = -1;
+
 // 	image = QImage();
 // 	data = image.constBits();
 
@@ -81,7 +83,7 @@ Texture::Texture(QString name, int width, int height, std::pair<GLenum, QString>
 	glFuncs->glTexParameteri(target.first, GL_TEXTURE_MIN_FILTER, minMagFilter.first);
 	glFuncs->glTexParameteri(target.first, GL_TEXTURE_MAG_FILTER, minMagFilter.first);
 
-	glFuncs->glTexImage2D(target.first, 0, GL_RGBA, imageSize.width(), imageSize.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+	glFuncs->glTexImage2D(target.first, 0, GL_RGBA8, imageSize.width(), imageSize.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
 
 	if(fbo)
 	{
