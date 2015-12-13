@@ -28,15 +28,34 @@ __global__ void setup_rand(curandState *state){
 	curand_init(1234, idx, 0, &state[idx]);
 }
 
+inline
+__device__ unsigned char countAliveCells(int *data, size_t x0, size_t x1, size_t x2,
+	size_t y0, size_t y1, size_t y2) {
+	return data[x0 + y0] + data[x1 + y0] + data[x2 + y0]
+		+ data[x0 + y1] + data[x2 + y1]
+		+ data[x0 + y2] + data[x1 + y2] + data[x2 + y2];
+}
+
 __global__
-void PBO(uchar4 *texBuf)
+void GOL(uchar4 *texBuf, int *lifeBuf, int *output, size_t width, size_t height)
 {
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
-	//int y = threadIdx.y + blockIdx.y * blockDim.y;
-	//int offset = x + y * blockDim.x * gridDim.x;
+	int y = threadIdx.y + blockIdx.y * blockDim.y;
+	int offset = x + y * blockDim.x * gridDim.x;
 
-	if(x < N)
+	if(offset < N)
 	{
+		size_t x1 = offset % width;
+		size_t y1 = offset - x1;
+		size_t y0 = (y1 + (width * height) - width) % (width * height);
+		size_t y2 = (y1 + width) % (width * height);
+		size_t x0 = (x1 + width - 1) % width;
+		size_t x2 = (x1 + 1) % width;
+
+		unsigned char aliveCells = countAliveCells(lifeBuf, x0, x1, x2, y0, y1, y2);
+		output[y1 + x1] =
+			aliveCells == 3 || (aliveCells == 2 && lifeBuf[x1 + y1]) ? 1 : 0;
+
 		uchar4 col = texBuf[x];
 		unsigned char val = x % 255;
 
@@ -49,6 +68,7 @@ void PBO(uchar4 *texBuf)
 		if((int)col.z - val < 0)
 			col.z = 255;
 		col.z -= val;
+		col.w = 255;
 
 		texBuf[x] = col;
 	}
@@ -59,7 +79,7 @@ void CUExecuteKernel(std::vector<void*> *params)	//std::vector<void*> *params, s
 {
 	//CUTimer t;
 	//t.Begin();
-	PBO << <N_BLOCKS, BLOCK_SIZE >> >((uchar4*)(params->at(0)));
+	GOL<<<N_BLOCKS, BLOCK_SIZE >> >((uchar4*)(params->at(0)));
 
 	ERRORCHECK(cudaGetLastError());
 	//t.End();

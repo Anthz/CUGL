@@ -326,7 +326,7 @@ void BufferPopup::SetData()
 	{
 		Texture *t = GLSettings::TextureList.at(textureBox->currentIndex());
 		capacityBox->setValue(t->ImageSize().width() * t->ImageSize().height() * 4);
-		data = (void*)t->Data();
+		data = nullptr;//(void*)t->Data();
 	}
 }
 

@@ -51,6 +51,7 @@ void CUSettings::CUInit()
 		printf("Device %i: %s", d.handle, d.name);
 	}
 
+	//change current device in cugeneral + save/load
 	cudaSetDevice(0);
 }
 

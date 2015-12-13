@@ -165,9 +165,9 @@ bool CUGLBuffer::LoadData()
 	case GL_ARRAY_BUFFER:
 	{
 		bData = malloc(bSize);
-
+		
 		if(bDataPath == "")
-			Randomise((float*)bData, bCap);
+			RandomData<int>((int*)bData, bCap, 0.5, 1.5);//Randomise((float*)bData, bCap);
 		else
 			ParseFile((float*)bData);
 		break;

@@ -29,8 +29,6 @@ public:
 	virtual QSize minimumSizeHint() const override;
 	virtual QSize sizeHint() const override;
 
-	static std::vector<CUGLBuffer*> BufferList;
-
 	std::vector<Device> deviceList;
 
 private:

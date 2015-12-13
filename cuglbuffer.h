@@ -65,6 +65,14 @@ private:
 	bool cuda;
 	int paramID;
 
+	template <typename T>
+	inline void RandomData(T *data, int const& n, float const& min, float const& max)
+	{
+		for(int i = 0; i < n; i++)
+		{
+			data[i] = (max - min) * (rand() / (float)RAND_MAX) + min;
+		}
+	}
 };
 
 #endif // CUGLBUFFER_H

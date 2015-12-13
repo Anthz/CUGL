@@ -61,6 +61,7 @@ HEADERS  += mainwindow.h \
 			texture.h \
 			texturepopup.h \
 			utilities.h \
+			serializable.h \
 
 FORMS    += mainwindow.ui
 

@@ -91,7 +91,7 @@ void Object::Draw(GLenum drawMode, bool wireframe)
 		{
 			glFuncs->glBindBuffer(GL_PIXEL_UNPACK_BUFFER, texture->PBO());
 			glFuncs->glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, texture->ImageSize().width(), texture->ImageSize().height(),
-				GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+				GL_BGRA, GL_UNSIGNED_BYTE, NULL);
 			glFuncs->glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 		}
 	}
