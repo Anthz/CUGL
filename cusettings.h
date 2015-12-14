@@ -42,10 +42,10 @@ private:
 
 signals:
 
-	public slots :
+public slots :
 
-		private slots :
-		void TabChanged(int i);
+private slots :
+	void TabChanged(int i);
 };
 
 #endif // CUSETTINGS_H

@@ -22,10 +22,11 @@ public:
 	explicit TextureTab(QWidget* parent = 0);
 	~TextureTab();
 
-	void AddToList(Texture *t);	
+	void AddToList(Texture *t);
 
 private:
-	QVBoxLayout* mainLayout;
+	QGridLayout* mainLayout;
+	//QVBoxLayout* mainLayout;
 	QHBoxLayout* buttonLayout;
 	QHBoxLayout* textureLayout;
 	QPushButton* add;
@@ -35,6 +36,7 @@ private:
 	QLabel *texturePreview;
 	QScrollArea *textureScroll;
 	QStringList textureStringList;
+
 signals:
 
 public slots:

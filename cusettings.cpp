@@ -1,7 +1,5 @@
 #include "cusettings.h"
 
-std::vector<CUGLBuffer*> CUSettings::BufferList;
-
 //param > buffer
 //param - select from objects properties, buffers - order
 

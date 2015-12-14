@@ -3,20 +3,19 @@
 
 TextureTab::TextureTab(QWidget* parent /*= 0*/)
 {
-	mainLayout = new QVBoxLayout;
+	mainLayout = new QGridLayout;
 	buttonLayout = new QHBoxLayout;
-	textureLayout = new QHBoxLayout;
 
-	add = new QPushButton("Add");
+	add = new QPushButton("+");
 	connect(add, &QPushButton::clicked, this, &TextureTab::Popup);
 
-	remove = new QPushButton("Remove");
+	remove = new QPushButton("-");
 	connect(remove, &QPushButton::clicked, this, &TextureTab::RemoveTexture);
 
 	buttonLayout->addWidget(add);
 	buttonLayout->addWidget(remove);
 
-	mainLayout->addLayout(buttonLayout);
+	mainLayout->addLayout(buttonLayout, 0, 0);
 
 	listModel = new QStringListModel();
 	textureStringList = QStringList();
@@ -33,7 +32,8 @@ TextureTab::TextureTab(QWidget* parent /*= 0*/)
 	connect(listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(TextureSelected(QItemSelection)));
 	connect(listView->itemDelegate(), SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)), this, SLOT(ListEditEnd(QWidget*, QAbstractItemDelegate::EndEditHint)));
 
-	textureLayout->addWidget(listView);
+	mainLayout->addWidget(listView, 1, 0);
+	mainLayout->setColumnStretch(0, 1);
 
 	texturePreview = new QLabel;
 	texturePreview->setBackgroundRole(QPalette::Base);
@@ -44,8 +44,8 @@ TextureTab::TextureTab(QWidget* parent /*= 0*/)
 	textureScroll->setBackgroundRole(QPalette::Dark);
 	textureScroll->setWidget(texturePreview);
 	
-	textureLayout->addWidget(textureScroll);
-	mainLayout->addLayout(textureLayout);
+	mainLayout->addWidget(textureScroll, 1, 1);
+	mainLayout->setColumnStretch(1, 4);
 
 	setLayout(mainLayout);
 }

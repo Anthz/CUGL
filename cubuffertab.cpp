@@ -81,7 +81,6 @@ void CUBufferTab::ActivatedChanged(int i)
 {
 	CUGLBuffer *b = GLSettings::BufferList.at(bufferBox->currentIndex());
 	b->Cuda((i == 0) ? false : true);
-	CUSettings::BufferList.push_back(b);
 }
 
 void CUBufferTab::ParamIDChanged(int i)

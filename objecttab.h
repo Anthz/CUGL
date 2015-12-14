@@ -8,6 +8,9 @@
 #include <QPushButton>
 #include <QAbstractItemView>
 #include <QMessageBox>
+#include <QListView>
+#include <QStringListModel>
+#include <QScrollArea>
 
 #include "object.h"
 #include "cuglbuffer.h"
@@ -26,17 +29,23 @@ public:
 private:
 	QString BuffersToString(std::vector<CUGLBuffer*> *buffers);
 
-	QVBoxLayout* mainLayout;
+	QGridLayout* mainLayout;
 	QHBoxLayout* buttonLayout;
 	QPushButton* add;
 	QPushButton* remove;
 	QTableWidget* table;
+	QStringList objectStringList;
+	QStringListModel *listModel;
+	QListView *listView;
+	QScrollArea *detailScroll;
 
 signals:
 
 public slots:
 
 private slots:
+	void ObjectSelected(const QItemSelection& selection);
+	void ListEditEnd(QWidget *editor, QAbstractItemDelegate::EndEditHint);
 	void TableDoubleClicked();
 	void RemoveObject();
 	void Popup();

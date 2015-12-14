@@ -30,7 +30,8 @@ __global__ void setup_rand(curandState *state){
 
 inline
 __device__ unsigned char countAliveCells(int *data, size_t x0, size_t x1, size_t x2,
-	size_t y0, size_t y1, size_t y2) {
+	size_t y0, size_t y1, size_t y2)
+{
 	return data[x0 + y0] + data[x1 + y0] + data[x2 + y0]
 		+ data[x0 + y1] + data[x2 + y1]
 		+ data[x0 + y2] + data[x1 + y2] + data[x2 + y2];
@@ -55,22 +56,6 @@ void GOL(uchar4 *texBuf, int *lifeBuf, int *output, size_t width, size_t height)
 		unsigned char aliveCells = countAliveCells(lifeBuf, x0, x1, x2, y0, y1, y2);
 		output[y1 + x1] =
 			aliveCells == 3 || (aliveCells == 2 && lifeBuf[x1 + y1]) ? 1 : 0;
-
-		uchar4 col = texBuf[x];
-		unsigned char val = x % 255;
-
-		if((int)col.x - val < 0)
-			col.x = 255;
-		col.x -= val;
-		if((int)col.y - val < 0)
-			col.y = 255;
-		col.y -= val;
-		if((int)col.z - val < 0)
-			col.z = 255;
-		col.z -= val;
-		col.w = 255;
-
-		texBuf[x] = col;
 	}
 }
 
@@ -79,7 +64,7 @@ void CUExecuteKernel(std::vector<void*> *params)	//std::vector<void*> *params, s
 {
 	//CUTimer t;
 	//t.Begin();
-	GOL<<<N_BLOCKS, BLOCK_SIZE >> >((uchar4*)(params->at(0)));
+	GOL<<<N_BLOCKS, BLOCK_SIZE >>>((uchar4*)(params->at(0)), (int*)(params->at(1)), (int*)(params->at(2)));
 
 	ERRORCHECK(cudaGetLastError());
 	//t.End();
