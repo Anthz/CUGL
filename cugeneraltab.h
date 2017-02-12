@@ -13,6 +13,12 @@
 
 #include "colourtextbox.h"
 
+struct Device
+{
+	char name[100];
+	int handle;
+};
+
 class CUGeneralTab : public QWidget
 {
 	Q_OBJECT
@@ -21,22 +27,18 @@ public:
 	explicit CUGeneralTab(QWidget* parent = 0);
 	~CUGeneralTab();
 
+	void UpdateDevices(std::vector<Device>& dList);
+
 private:
 	QGridLayout* mainLayout;
-	QLabel *widthLabel, *heightLabel,
-	       *drawLabel, *colourLabel,
-	       *vsyncLabel, *msaaLabel,
-	       *fovLabel;
-	QSpinBox *widthBox, *heightBox,
-	         *fovBox;
-	QComboBox* drawBox;
-	ColourTextBox* colourBox;
-	QCheckBox *vsyncBox, *msaaBox;
+	QLabel *deviceLabel;
+	QComboBox* deviceBox;
+
 signals:
 
 public slots:
 private slots:
-	void WidthChanged(int i);
+	void DeviceChanged(int i);
 };
 
 #endif // CUGENERALTAB_H

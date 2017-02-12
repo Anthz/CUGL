@@ -17,12 +17,6 @@ class CUSettings : public QWidget
 	Q_OBJECT
 
 public:
-	struct Device
-	{
-		char name[100];
-		int handle;
-	};
-
 	explicit CUSettings(QWidget* parent = 0);
 	~CUSettings();
 

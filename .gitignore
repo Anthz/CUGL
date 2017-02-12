@@ -278,3 +278,6 @@ Makefile*
 *.ptx
 *.cubin
 *.fatbin
+*.sln
+*.vcxproj
+*.filters

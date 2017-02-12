@@ -38,8 +38,6 @@ GLWidget::~GLWidget()
 	{
 		delete s;
 	}
-
-	delete glFuncs;
 }
 
 void GLWidget::initializeGL()

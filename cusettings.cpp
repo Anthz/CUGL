@@ -48,7 +48,7 @@ void CUSettings::CUInit()
 		printf("Device %i: %s", d.handle, d.name);
 	}
 
-	cudaSetDevice(0);
+	static_cast<CUGeneralTab*>(tabs->widget(0))->UpdateDevices(deviceList);
 }
 
 void CUSettings::TabChanged(int i)
