@@ -27,11 +27,7 @@ ParamTab::ParamTab(QWidget* parent) : QWidget(parent)
 
 ParamTab::~ParamTab()
 {
-	delete buttonLayout;
-	delete add;
-	delete remove;
-	delete table;
-	delete mainLayout;
+ 	delete mainLayout;
 }
 
 void ParamTab::AddClicked()

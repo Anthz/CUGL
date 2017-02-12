@@ -8,9 +8,6 @@
 #include <QPushButton>
 #include <QAbstractItemView>
 #include <QMessageBox>
-#include <QListView>
-#include <QStringListModel>
-#include <QScrollArea>
 
 #include "cuglbuffer.h"
 #include "bufferpopup.h"
@@ -26,22 +23,17 @@ public:
 	void AddToTable(CUGLBuffer* b);
 
 private:
-	QGridLayout *mainLayout;
-	QHBoxLayout *bufferLayout, *buttonLayout;
+	QVBoxLayout* mainLayout;
+	QHBoxLayout* buttonLayout;
 	QPushButton* add;
 	QPushButton* remove;
 	QTableWidget* table;
-	QStringList bufferStringList;
-	QStringListModel *listModel;
-	QListView *listView;
-	QScrollArea *detailScroll;
-signals:
+
+	signals:
 
 public slots:
 
 private slots:
-	void BufferSelected(const QItemSelection& selection);
-	void ListEditEnd(QWidget *editor, QAbstractItemDelegate::EndEditHint);
 	void TableDoubleClicked();
 	void RemoveBuffer();
 	void Popup();

@@ -19,12 +19,12 @@
 
 #include "glwidget.h"
 #include "utilities.h"
+#include "savable.h"
 
-class CUGLBuffer
+class CUGLBuffer : public Savable
 {
 public:
-	CUGLBuffer(QString name, int capacity, std::pair<GLenum, QString> target, QString data, std::pair<GLenum, QString> usage, std::pair<QString, int> attribID, int attribCapacity, std::tuple<GLenum, QString, int> type, bool norm);
-	CUGLBuffer(QString name, int capacity, std::pair<GLenum, QString> target, void *data, std::pair<GLenum, QString> usage, std::pair<QString, int> attribID, int attribCapacity, std::tuple<GLenum, QString, int> type, bool norm);
+	CUGLBuffer(QString name, int capacity, QString target, QString data, QString dataPath, QString usage, QString attribID, int attribCapacity, QString type, bool norm, bool perInst);
 	~CUGLBuffer();
 
 	static void* RegisterBuffer(GLuint buf);
@@ -41,9 +41,12 @@ public:
 	void Cuda(bool val) { cuda = val; }
 	int ParamID() const { return paramID; }
 	void ParamID(int val) { paramID = val; }
+	bool PerInstance() const { return perInstance; }
+
+	virtual void Save(QTextStream *output, std::vector<QString> *varList) override;
 
 	GLuint bufID;
-	QString bName, bDataPath;
+	QString bName, bDataType, bDataPath;
 	void *bData;
 	int bCap, bSize, aSize;
 
@@ -55,14 +58,18 @@ private:
 	void InitTex();
 	void Randomise(float *data, int n);
 	void ParseFile(float *data);
-	bool LoadData();
+	bool LoadData(QString dataType);
+	void GetGLTarget(QString targetString);
+	void GetGLUsage(QString usageString);
+	void GetAttribID(QString attribString);
+	void GetGLType(QString typeString);
 
 	QOpenGLFunctions_3_3_Core* glFuncs;
 	GLuint tex;
 	void *cudaBuf;
 	QImage img;
 	QSize texSize;
-	bool cuda;
+	bool cuda, perInstance;
 	int paramID;
 
 	template <typename T>
@@ -71,6 +78,30 @@ private:
 		for(int i = 0; i < n; i++)
 		{
 			data[i] = (max - min) * (rand() / (float)RAND_MAX) + min;
+		}
+	}
+
+	//parse file of type T
+	//storing 
+	template <typename T>
+	inline void ParseFile(T *data, const char& delim = ' ')
+	{
+		std::ifstream in(bDataPath.toStdString());
+		std::string s = "|";
+		std::vector<QString> elems;
+		int counter = 0;
+
+		getline(in, s);
+		while(s.size() != 0)
+		{
+			split(s, delim, elems);
+			for(int i = 0; i < s.size(); ++i)
+			{
+				data[counter + i] = elems.at(i).toDouble();
+			}
+			counter += s.size();
+			elems.clear();
+			getline(in, s);
 		}
 	}
 };

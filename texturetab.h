@@ -25,8 +25,7 @@ public:
 	void AddToList(Texture *t);
 
 private:
-	QGridLayout* mainLayout;
-	//QVBoxLayout* mainLayout;
+	QVBoxLayout* mainLayout;
 	QHBoxLayout* buttonLayout;
 	QHBoxLayout* textureLayout;
 	QPushButton* add;

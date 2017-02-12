@@ -1,12 +1,12 @@
 #version 330
 
-in highp vec3 aPos;
-in highp vec4 iPos;
-in mediump vec2 aUV;
-
 uniform highp mat4 uModelMatrix;
 uniform highp mat4 uViewMatrix;
 uniform highp mat4 uProjMatrix;
+
+in highp vec3 aPos;
+in highp vec4 iPos;
+in mediump vec2 aUV;
 
 out mediump vec2 texCoords;
 

@@ -14,6 +14,7 @@ TexturePopup::TexturePopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHin
 	widthLabel = new QLabel("Width:");
 	heightLabel = new QLabel("Height:");
 	depthLabel = new QLabel("Depth:");
+	formatLabel = new QLabel("Format:");
 	minMagLabel = new QLabel("Min/Mag Filter:");
 	wrapLabel = new QLabel("Wrap Mode:");
 	fboLabel = new QLabel("FBO:");
@@ -47,6 +48,11 @@ TexturePopup::TexturePopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHin
 	depthBox->setMinimum(0);
 	depthBox->setMaximum(9999);
 	depthBox->setKeyboardTracking(false);
+
+	formatBox = new QComboBox;
+	formatBox->addItem("RGBA");
+	formatBox->addItem("RGB");
+	formatBox->addItem("8-bit");
 
 	minMagBox = new QComboBox;
 	minMagBox->addItem("GL_NEAREST");
@@ -82,13 +88,15 @@ TexturePopup::TexturePopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHin
 	mainLayout->addWidget(heightBox, 4, 1);
 	mainLayout->addWidget(depthLabel, 5, 0);
 	mainLayout->addWidget(depthBox, 5, 1);
-	mainLayout->addWidget(minMagLabel, 6, 0);
-	mainLayout->addWidget(minMagBox, 6, 1);
-	mainLayout->addWidget(wrapLabel, 7, 0);
-	mainLayout->addWidget(wrapBox, 7, 1);
-	mainLayout->addWidget(fboLabel, 8, 0);
-	mainLayout->addWidget(fboBox, 8, 1);
-	mainLayout->addWidget(buttons, 9, 1);
+	mainLayout->addWidget(formatLabel, 6, 0);
+	mainLayout->addWidget(formatBox, 6, 1);
+	mainLayout->addWidget(minMagLabel, 7, 0);
+	mainLayout->addWidget(minMagBox, 7, 1);
+	mainLayout->addWidget(wrapLabel, 8, 0);
+	mainLayout->addWidget(wrapBox, 8, 1);
+	mainLayout->addWidget(fboLabel, 9, 0);
+	mainLayout->addWidget(fboBox, 9, 1);
+	mainLayout->addWidget(buttons, 10, 1);
 
 	setLayout(mainLayout);
 
@@ -106,6 +114,9 @@ TexturePopup::TexturePopup(QWidget* parent, Texture *t) : TexturePopup(parent)
 	widthBox->setValue(t->ImageSize().width());
 	heightBox->setValue(t->ImageSize().height());
 	//depthBox
+
+	UpdateFormatBox(t->Image().format());
+
 	minMagBox->setCurrentIndex(minMagBox->findText(t->MinMagFilter().second));
 	wrapBox->setCurrentIndex(wrapBox->findText(t->WrapMode().second));
 	fboBox->setChecked(t->FBO());
@@ -113,29 +124,7 @@ TexturePopup::TexturePopup(QWidget* parent, Texture *t) : TexturePopup(parent)
 
 TexturePopup::~TexturePopup()
 {
-	delete nameLabel;
-	delete targetLabel;
-	delete dataLabel;
-	delete widthLabel;
-	delete heightLabel;
-	delete depthLabel;
-	delete minMagLabel;
-	delete wrapLabel;
-	delete fboLabel;
-
-	delete nameBox;
-	delete dataBox;
-	delete widthBox;
-	delete heightBox;
-	delete depthBox;
-	delete targetBox;
-	delete minMagBox;
-	delete wrapBox;
-	delete fboBox;
-
-	delete buttons;
-
-	delete mainLayout;
+ 	delete mainLayout;
 }
 
 bool TexturePopup::Validation()
@@ -152,7 +141,7 @@ bool TexturePopup::Validation()
 		nameBox->setStyleSheet("");
 	}
 
-	if(!dataBox->text().isEmpty() && img.isNull())
+	/*if(!dataBox->text().isEmpty())
 	{
 		nameBox->setStyleSheet("border: 2px solid red");
 		result = false;
@@ -160,7 +149,7 @@ bool TexturePopup::Validation()
 	else
 	{
 		nameBox->setStyleSheet("");
-	}
+	}*/
 
 	return result;
 }
@@ -205,140 +194,69 @@ void TexturePopup::TargetChanged(int i)
 	}
 }
 
-void TexturePopup::SetTarget()
+void TexturePopup::UpdateFormatBox(QImage::Format fmt)
 {
-	switch(targetBox->currentIndex())
+	switch(fmt)
 	{
-		case 0:
-		{
-			target.first = GL_TEXTURE_1D;
-			break;
-		}
-		case 1:
-		{
-			target.first = GL_TEXTURE_2D;
-			break;
-		}
-		case 2:
-		{
-			target.first = GL_TEXTURE_3D;
-			break;
-		}
-		case 3:
-		{
-			target.first = GL_TEXTURE_RECTANGLE;
-			break;
-		}
-		case 4:
-		{
-			target.first = GL_TEXTURE_CUBE_MAP;
-			break;
-		}
+	case QImage::Format_ARGB32:
+		formatBox->setCurrentIndex(0);
+		break;
+	case QImage::Format_RGB888:
+		formatBox->setCurrentIndex(1);
+		break;
+	case QImage::Format_Grayscale8:
+		formatBox->setCurrentIndex(2);
+		break;
 	}
-
-	target.second = targetBox->currentText();
 }
 
-void TexturePopup::SetMinMagFilter()
+QImage::Format TexturePopup::GetFormat()
 {
-	switch(minMagBox->currentIndex())
+	QImage::Format fmt;
+
+	switch(formatBox->currentIndex())
 	{
-		case 0:
-		{
-			minMagFilter.first = GL_NEAREST;
-			break;
-		}
-		case 1:
-		{
-			minMagFilter.first = GL_LINEAR;
-			break;
-		}
-		case 2:
-		{
-			minMagFilter.first = GL_NEAREST_MIPMAP_NEAREST;
-			break;
-		}
-		case 3:
-		{
-			minMagFilter.first = GL_LINEAR_MIPMAP_NEAREST;
-			break;
-		}
-		case 4:
-		{
-			minMagFilter.first = GL_NEAREST_MIPMAP_LINEAR;
-			break;
-		}
-		case 5:
-		{
-			minMagFilter.first = GL_LINEAR_MIPMAP_LINEAR;
-			break;
-		}
+	case 0:
+		fmt = QImage::Format_ARGB32;
+		break;
+	case 1:
+		fmt = QImage::Format_RGB888;
+		break;
+	case 2:
+		fmt = QImage::Format_Grayscale8;
+		break;
 	}
 
-	minMagFilter.second = minMagBox->currentText();
-}
-
-void TexturePopup::SetWrapMode()
-{
-	switch(wrapBox->currentIndex())
-	{
-		case 0:
-		{
-			wrapMode.first = GL_REPEAT;
-			break;
-		}
-		case 1:
-		{
-			wrapMode.first = GL_MIRRORED_REPEAT;
-			break;
-		}
-		case 2:
-		{
-			wrapMode.first = GL_CLAMP_TO_EDGE;
-			break;
-		}
-		case 3:
-		{
-			wrapMode.first = GL_CLAMP_TO_BORDER;
-			break;
-		}
-		case 4:
-		{
-			wrapMode.first = GL_MIRROR_CLAMP_TO_EDGE;
-			break;
-		}
-	}
-
-	wrapMode.second = wrapBox->currentText();
+	return fmt;
 }
 
 void TexturePopup::CustomDataClicked()
 {
-	QString s;
 	QString title = "Open Image File";
 	QString filter = "Image Files (*.png *.jpg *.bmp)";
 
-	s = QFileDialog::getOpenFileName(this, title, QDir::currentPath(), filter);
-	if(s.size() == 0)
+	path = QFileDialog::getOpenFileName(this, title, QDir::currentPath(), filter);
+	if(path.size() == 0)
 		return; //cancelled
 
-	dataBox->setText(s);
-	dataBox->setCursorPosition(s.size());
+	dataBox->setText(path);
+	dataBox->setCursorPosition(path.size());
 
-	int nameBegin = s.lastIndexOf("/") + 1;
+	int nameBegin = path.lastIndexOf("/") + 1;
 	//int nameEnd = s.lastIndexOf(".") + 1; //to remove extension
 
-	QString name = s.right(s.length() - nameBegin);
+	QString name = path.right(path.length() - nameBegin);	//only used for error message
 
-	img = QImage(s);
+	QImage img = QImage(path);	//temp image instead of passing it through (makes saving easier)
 	if(!img.isNull())
 	{
 		widthBox->setValue(img.size().width());
 		heightBox->setValue(img.size().height());
+		UpdateFormatBox(img.format());
 	}
 	else
 	{
-		Logger::Log("Faied to load texture " + name.toStdString());
+		Logger::Log("Failed to load texture " + name.toStdString());
 	}
 }
 
@@ -346,10 +264,6 @@ void TexturePopup::Save()
 {
 	if(Validation())
 	{
-		SetTarget();
-		SetMinMagFilter();
-		SetWrapMode();
-
 		QString name = nameBox->text();
 		QString dataPath = dataBox->text();
 
@@ -362,24 +276,26 @@ void TexturePopup::Save()
 		if(height == 0)
 			height = GLWidget::Height();
 
+		target = targetBox->currentText();
+		minMagFilter = minMagBox->currentText();
+		wrapMode = wrapBox->currentText();
+		QImage::Format fmt = GetFormat();
+
 		bool fbo = fboBox->isChecked();
 
 		if(!append)
 		{
 			Texture *t;
 
-			if(!img.isNull())
-				t = new Texture(name, dataPath, img, width, height, target, minMagFilter, wrapMode, fbo);
-			else
-				t = new Texture(name, width, height, target, minMagFilter, wrapMode, fbo);
-
+			t = new Texture(name, dataPath, width, height, fmt, target, minMagFilter, wrapMode, fbo);
 			GLSettings::TextureList.push_back(t);
 			static_cast<TextureTab*>(parent())->AddToList(t);
 		}
 		else
 		{
-			appBuf->Name(name);
+			/*appBuf->Name(name);
 			appBuf->Target(target);
+			appBuf->Image = appBuf->Image.convertToFormat(fmt);
 			if(dataPath != "")
 			{
 				appBuf->DataPath(dataPath);
@@ -388,7 +304,7 @@ void TexturePopup::Save()
 			appBuf->ImageSize(QSize(width, height));
 			appBuf->MinMagFilter(minMagFilter);
 			appBuf->WrapMode(wrapMode);
-			appBuf->FBO(fbo);
+			appBuf->FBO(fbo);*/
 		}
 
 		close();

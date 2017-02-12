@@ -39,13 +39,12 @@ private:
 	void InitSettings();
 
 	Ui::MainWindow* ui;
-	QSplitter* mainSplitter, *settingsSplitter;
+	QSplitter* mainSplitter, *bottomSplitter, *sideSplitter;
 	QVBoxLayout *mainLayout, *openglLayout, *cudaLayout;
 	GLSettings* openglSettings;
 	CUSettings* cudaSettings;
 	OutputSettings *outputSettings;
 	GLWidget* gl;
-	QTabWidget *openglTabs, *cudaTabs;
 	QSizePolicy top, bottom;
 
 	private slots:
@@ -54,6 +53,10 @@ private:
 	void on_actionOpenGL_2_triggered(bool checked);
 	void on_actionCUDA_triggered(bool checked);
 	void on_actionOutput_triggered(bool checked);
+    void on_actionSave_Project_triggered();
+    void on_actionLoad_Project_triggered();
+    void on_actionUser_Guide_triggered();
+    void on_actionAbout_triggered();
 };
 
 #endif // MAINWINDOW_H

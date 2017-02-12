@@ -30,39 +30,31 @@ private:
 	void CustomDataClicked();
 	void DisableBufferBoxes(bool b);
 	bool Validation();
-	void SetTarget();
-	void SetData();
-	void SetUsage();
-	void SetType();
 
 	QWidget* parentWidget;
 	QGridLayout* mainLayout;
+	QHBoxLayout* checkboxLayout;
 	QLabel *nameLabel, *targetLabel,
-		   *capacityLabel, *dataLabel,
-	       *usageLabel, *attribNameLabel,
-	       *attribCapacityLabel, *typeLabel,
-	       *normalisedLabel;
+		*capacityLabel, *dataLabel,
+		*usageLabel, *attribNameLabel,
+		*attribCapacityLabel, *typeLabel,
+		*normalisedLabel, *perInstanceLabel;
 	//*handledLabel;
 	QLineEdit *nameBox, *dataBox, *attribNameBox;
 	QSpinBox *capacityBox, *attribCapacityBox;
 	QComboBox *targetBox, *dataPickerBox, *textureBox, *usageBox, *typeBox;
-	QCheckBox* normalisedBox; //*handledBox;
+	QCheckBox* normalisedBox, *perInstanceBox;
 	QDialogButtonBox* buttons;
-
-	void *data;
-	std::pair<GLenum, QString> target, usage;
-	std::tuple<GLenum, QString, int> type;
 
 	bool append;
 	CUGLBuffer *appBuf;
 
-private slots:
+	private slots:
 	bool eventFilter(QObject* object, QEvent* event);
 	void TargetChanged(int i);
 	void DataChanged(int i);
+	void TextureChanged(int i);
 	void Save();
 };
 
 #endif // BUFFERPOPUP_H
-
-

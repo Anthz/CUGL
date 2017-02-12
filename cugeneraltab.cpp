@@ -63,21 +63,7 @@ CUGeneralTab::CUGeneralTab(QWidget* parent) : QWidget(parent)
 
 CUGeneralTab::~CUGeneralTab()
 {
-	delete mainLayout;
-	delete widthLabel;
-	delete heightLabel;
-	delete drawLabel;
-	delete colourLabel;
-	delete vsyncLabel; 
-	delete msaaLabel;
-	delete fovLabel;
-	delete widthBox;
-	delete heightBox;
-	delete fovBox;
-	delete drawBox;
-	delete colourBox;
-	delete vsyncBox;
-	delete msaaBox;
+ 	delete mainLayout;
 }
 
 void CUGeneralTab::WidthChanged(int i)

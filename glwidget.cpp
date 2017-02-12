@@ -2,6 +2,7 @@
 #include "glsettings.h"
 #include "cusettings.h"
 
+void CUSetup();
 void CUExecuteKernel(std::vector<void*> *params);	//std::vector<void*> *params
 
 namespace
@@ -24,6 +25,9 @@ GLWidget::GLWidget(QWidget* parent) : QOpenGLWidget(parent)
 		QVector3D(0.0, 1.0, 0.0)); // Up vector
 	drawMode = GL_TRIANGLES;
 	play = false;
+	step = false;
+	paramWarning = false;
+	srand(time(NULL));
 	timer.start();
 	setFocusPolicy(Qt::StrongFocus);
 }
@@ -35,7 +39,7 @@ GLWidget::~GLWidget()
 		delete s;
 	}
 
-	//delete glFuncs;
+	delete glFuncs;
 }
 
 void GLWidget::initializeGL()
@@ -51,8 +55,8 @@ void GLWidget::initializeGL()
 
 	width = QWidget::width();
 	height = QWidget::height();
-	
-	//glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_DEPTH_TEST);
 	//glDepthFunc(GL_LESS);
 
 	glEnable(GL_BLEND);
@@ -64,23 +68,34 @@ void GLWidget::initializeGL()
 	//glCullFace(GL_BACK);
 
 	//configure working directory correctly (./ in VS, ../ otherwise)
-    //Shader *shader = new Shader("Textured Particle Shader", "./Shaders/t_bb_Particle_3_3.vert", "./Shaders/t_bb_Particle_3_3.frag");
-	Shader *shader = new Shader("Textured Particle Shader", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/t_bb_Particle_3_3.vert", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/t_bb_Particle_3_3.frag");
+	//Shader *shader = new Shader("Textured Particle Shader", "./Shaders/t_bb_Particle_3_3.vert", "./Shaders/t_bb_Particle_3_3.frag");
+	Shader *shader = new Shader("Textured Particle Shader", "./Shaders/t_bb_Particle_3_3.vert", "./Shaders/t_bb_Particle_3_3.frag");
 	ShaderList.push_back(shader);
 
-	Shader *shader2 = new Shader("Particle Shader", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/bb_Particle_3_3.vert", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/bb_Particle_3_3.frag");
+	Shader *shader2 = new Shader("Particle Shader", "./Shaders/bb_Particle_3_3.vert", "./Shaders/bb_Particle_3_3.frag");
 	ShaderList.push_back(shader2);
 
-	Shader *shader3 = new Shader("Simple Shader", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/simple_3_3.vert", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/simple_3_3.frag");
+	Shader *shader3 = new Shader("Simple Shader", "./Shaders/simple_3_3.vert", "./Shaders/simple_3_3.frag");
 	ShaderList.push_back(shader3);
 
-	Shader *shader4 = new Shader("FBO Shader", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/fbo_3_3.vert", "C:/Users/Anth/Documents/GitHub/CUGL/Shaders/fbo_3_3.frag");
+	Shader *shader4 = new Shader("Heightmap Shader", "./Shaders/heightmap.vert", "./Shaders/heightmap.frag");
 	ShaderList.push_back(shader4);
+
+	Shader *shader5 = new Shader("FBO Shader", "./Shaders/fbo_3_3.vert", "./Shaders/fbo_3_3.frag");
+	ShaderList.push_back(shader5);
+
+	Shader *shader6 = new Shader("Top Probability Shader", "./Shaders/top_prob_3_3.vert", "./Shaders/prob_3_3.frag");
+	ShaderList.push_back(shader6);
+
+	Shader *shader7 = new Shader("Bottom Probability Shader", "./Shaders/bottom_prob_3_3.vert", "./Shaders/prob_3_3.frag");
+	ShaderList.push_back(shader7);
 
 	int r, g, b, a;
 	QColor c("#6495ED");
 	c.getRgb(&r, &g, &b, &a);
 	glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+
+	CUSetup();	//setup rand
 }
 
 //context made current in init/paint/resizeGL
@@ -94,9 +109,9 @@ void GLWidget::paintGL()
 	//update
 	//render FBO tex to screen
 	//render other objs to screen
-	if(play)
+	if(GLSettings::ObjectList.size() > 0)
 	{
-		if(GLSettings::ObjectList.size() > 0)
+		if(play || step)
 		{
 			if(FBOList.size() > 0)
 			{
@@ -138,16 +153,17 @@ void GLWidget::paintGL()
 					CUGLBuffer::UnmapResource(GLSettings::BufferList.at(i)->CudaBuf());
 				}
 			}
-
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			for each (Object *o in GLSettings::ObjectList)
-			{
-				o->Draw(drawMode, false);	
-			}
-
-			update();
+			step = false;
 		}
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		for each (Object *o in GLSettings::ObjectList)
+		{
+			o->Draw(drawMode, false);
+		}
+
+		update();
 	}
 }
 
@@ -207,6 +223,17 @@ void GLWidget::MSAA(bool b)
 void GLWidget::Play(bool b)
 {
 	glPtr->play = b;
+}
+
+void GLWidget::StepForward()
+{
+	glPtr->step = true;
+}
+
+void GLWidget::StepBackward()
+{
+	//implement step back when saving/reversibility is enabled
+	//glPtr->play = b;
 }
 
 QMatrix4x4 *GLWidget::ProjMatrix()
@@ -274,7 +301,7 @@ int GLWidget::SetFBOTexture(GLuint id)
 	glPtr->glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glPtr->glGenRenderbuffers(1, &rbo);
 	glPtr->glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-	glPtr->glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, Width(), Height());	//Width(), Height()
+	glPtr->glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, Width(), Height());
 	glPtr->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rbo);
 	glPtr->glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, id, 0);
 
@@ -285,7 +312,7 @@ int GLWidget::SetFBOTexture(GLuint id)
 	CheckFBOStatus();
 
 	glPtr->FBOList.push_back(fbo);
-	 
+
 	glPtr->glClearColor(0.0, 0.0, 0.0, 1.0);
 	glPtr->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	//first clear to ensure drawing
 
@@ -304,7 +331,7 @@ void GLWidget::keyPressEvent(QKeyEvent* e)
 	{
 		makeCurrent();
 		//yRot += 3.0f;
-		viewMatrix->rotate(3.0f, QVector3D(0.0, 1.0, 0.0));
+		viewMatrix->rotate(2.0f, QVector3D(0.0, 1.0, 0.0));
 		update();
 		doneCurrent();
 	}
@@ -312,7 +339,7 @@ void GLWidget::keyPressEvent(QKeyEvent* e)
 	{
 		makeCurrent();
 		//yRot -= 3.0f;
-		viewMatrix->rotate(-3.0f, QVector3D(0.0, 1.0, 0.0));
+		viewMatrix->rotate(-2.0f, QVector3D(0.0, 1.0, 0.0));
 		update();
 		doneCurrent();
 	}
@@ -321,14 +348,14 @@ void GLWidget::keyPressEvent(QKeyEvent* e)
 	{
 		makeCurrent();
 		//GLSettings::ObjectList.at(0)->Move(QVector3D(0.0, 3.0, 0.0));
-		viewMatrix->translate(QVector3D(0.0, 3.0, 0.0));
+		viewMatrix->translate(QVector3D(0.0, 2.0, 0.0));
 		update();
 		doneCurrent();
 	}
 	if(e->key() == Qt::Key_W)
 	{
 		makeCurrent();
-		viewMatrix->translate(QVector3D(0.0, 0.0, 3.0));
+		viewMatrix->translate(QVector3D(0.0, 0.0, 2.0));
 		//GLSettings::ObjectList.at(0)->Move(QVector3D(0.0, 0.0, 3.0));
 		update();
 		doneCurrent();
@@ -336,7 +363,7 @@ void GLWidget::keyPressEvent(QKeyEvent* e)
 	if(e->key() == Qt::Key_E)
 	{
 		makeCurrent();
-		viewMatrix->translate(QVector3D(0.0, -3.0, 0.0));
+		viewMatrix->translate(QVector3D(0.0, -2.0, 0.0));
 		//GLSettings::ObjectList.at(0)->Move(QVector3D(0.0, -3.0, 0.0));
 		update();
 		doneCurrent();
@@ -344,7 +371,7 @@ void GLWidget::keyPressEvent(QKeyEvent* e)
 	if(e->key() == Qt::Key_A)
 	{
 		makeCurrent();
-		viewMatrix->translate(QVector3D(-3.0, 0.0, 0.0));
+		viewMatrix->translate(QVector3D(-2.0, 0.0, 0.0));
 		//GLSettings::ObjectList.at(0)->Move(QVector3D(-3.0, 0.0, 0.0));
 		update();
 		doneCurrent();
@@ -352,7 +379,7 @@ void GLWidget::keyPressEvent(QKeyEvent* e)
 	if(e->key() == Qt::Key_S)
 	{
 		makeCurrent();
-		viewMatrix->translate(QVector3D(0.0, 0.0, -3.0));
+		viewMatrix->translate(QVector3D(0.0, 0.0, -2.0));
 		//GLSettings::ObjectList.at(0)->Move(QVector3D(0.0, 0.0, -3.0));
 		update();
 		doneCurrent();
@@ -360,7 +387,7 @@ void GLWidget::keyPressEvent(QKeyEvent* e)
 	if(e->key() == Qt::Key_D)
 	{
 		makeCurrent();
-		viewMatrix->translate(QVector3D(3.0, 0.0, 0.0));
+		viewMatrix->translate(QVector3D(2.0, 0.0, 0.0));
 		//GLSettings::ObjectList.at(0)->Move(QVector3D(3.0, 0.0, 0.0));
 		update();
 		doneCurrent();
@@ -417,4 +444,14 @@ QSize GLWidget::sizeHint() const
 {
 	return QSize(600, 600);
 }
+
+void GLWidget::mousePressEvent(QMouseEvent *e)
+{
+	float xFactor = width / 256.0f;	//256 = N_X
+	float yFactor = height / 256.0f;	//256 = N_Y
+	int x = e->x() / xFactor;
+	int y = e->y() / yFactor;
+	QMessageBox::information(this, "Coords", QString("X: %1 Y: %2").arg(x).arg(y), QDialogButtonBox::Ok);
+}
+
 

@@ -9,10 +9,12 @@ ControlTab::ControlTab(QWidget* parent) : QWidget(parent)
 	back = new QPushButton("Step Back");
 	stop = new QPushButton("Stop");
 	play = new QPushButton("Play");
-	connect(play, SIGNAL(clicked()), this, SLOT(PlayClicked()));
-
 	forward = new QPushButton("Step Forward");
 	last = new QPushButton("Last");
+
+	connect(back, SIGNAL(clicked()), this, SLOT(StepBackward()));
+	connect(play, SIGNAL(clicked()), this, SLOT(PlayClicked()));
+	connect(forward, SIGNAL(clicked()), this, SLOT(StepForward()));
 
 	mainLayout->addWidget(first);
 	mainLayout->addWidget(back);
@@ -26,14 +28,7 @@ ControlTab::ControlTab(QWidget* parent) : QWidget(parent)
 
 ControlTab::~ControlTab()
 {
-	delete mainLayout;
-
-	delete first;
-	delete back;
-	delete stop;
-	delete play;
-	delete forward;
-	delete last;
+ 	delete mainLayout;
 }
 
 void ControlTab::PlayClicked()
@@ -48,5 +43,17 @@ void ControlTab::PlayClicked()
 		GLWidget::Play(false);
 		play->setText("Play");
 	}
+}
+
+void ControlTab::StepForward()
+{
+	GLWidget::StepForward();
+	//update frame counter
+	//implement frame counter
+}
+
+void ControlTab::StepBackward()
+{
+	GLWidget::StepBackward();
 }
 

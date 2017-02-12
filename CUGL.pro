@@ -37,6 +37,7 @@ SOURCES += main.cpp\
 		texture.cpp \
 		texturepopup.cpp \
 		utilities.cpp \
+		savable.cpp	\
 
 HEADERS  += mainwindow.h \
             glwidget.h \
@@ -61,7 +62,7 @@ HEADERS  += mainwindow.h \
 			texture.h \
 			texturepopup.h \
 			utilities.h \
-			serializable.h \
+			savable.h	\
 
 FORMS    += mainwindow.ui
 
@@ -80,11 +81,11 @@ OBJECTS_DIR = debug/obj           # directory where .obj files will be saved
 #CUDA Settings
 CUDA_OBJECTS_DIR = debug/obj      # directory where .obj  of cuda file will be saved
 
-CUDA_DIR = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5"
+CUDA_DIR = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5"
 SYSTEM_NAME = x64         # Depending on your system either 'Win32', 'x64', or 'Win64'
 SYSTEM_TYPE = 64            # '32' or '64', depending on your system
 CUDA_ARCH = sm_35           # Type of CUDA architecture, for example 'compute_10', 'compute_11', 'sm_10'
-NVCC_OPTIONS += --use_fast_math # default setting
+NVCC_OPTIONS += --use_fast_math # default setting22
 
 INCLUDE_FORMATTED = $$join(CUDA_DIR,'"', '"', '/include"')
 LIB_FORMATTED = $$join(CUDA_DIR,'"', '"', '/lib/x64"')
@@ -95,7 +96,7 @@ NVCC_FORMATTED = $$join(CUDA_DIR,'"', '"', '/bin/nvcc"')
 INCLUDEPATH += $$CUDA_DIR/include
 
 # library directories
-QMAKE_LIBDIR += $$CUDA_DIR/lib/$$SYSTEM_NAME #"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v6.5/lib/x64"
+QMAKE_LIBDIR += $$CUDA_DIR/lib/$$SYSTEM_NAME
 
 # Add the necessary libraries
 CUDA_LIBS= -lcuda -lcudart

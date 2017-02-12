@@ -3,49 +3,7 @@
 
 GLBufferTab::GLBufferTab(QWidget* parent) : QWidget(parent)
 {
-	mainLayout = new QGridLayout;
-	buttonLayout = new QHBoxLayout;
-
-	add = new QPushButton("+");
-	connect(add, &QPushButton::clicked, this, &GLBufferTab::Popup);
-
-	remove = new QPushButton("-");
-	connect(remove, &QPushButton::clicked, this, &GLBufferTab::RemoveBuffer);
-
-	buttonLayout->addWidget(add);
-	buttonLayout->addWidget(remove);
-
-	mainLayout->addLayout(buttonLayout, 0, 0);
-
-	listModel = new QStringListModel();
-	bufferStringList = QStringList();
-
-	for(int i = 0; i < GLSettings::TextureList.size(); ++i)
-	{
-		bufferStringList.push_back(QString(GLSettings::BufferList.at(i)->bName));
-	}
-
-	listModel->setStringList(bufferStringList);
-
-	listView = new QListView;
-	listView->setModel(listModel);
-	connect(listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(BufferSelected(QItemSelection)));
-	connect(listView->itemDelegate(), SIGNAL(closeEditor(QWidget*, QAbstractItemDelegate::EndEditHint)), this, SLOT(ListEditEnd(QWidget*, QAbstractItemDelegate::EndEditHint)));
-	mainLayout->addWidget(listView, 1, 0);
-	mainLayout->setColumnStretch(0, 1);
-
-	BufferPopup *p = new BufferPopup(this);
-
-	detailScroll = new QScrollArea;
-	detailScroll->setBackgroundRole(QPalette::Dark);
-	detailScroll->setWidget(p);
-
-	mainLayout->addWidget(detailScroll, 1, 1);
-	mainLayout->setColumnStretch(1, 4);
-
-	setLayout(mainLayout);
-
-	/*mainLayout = new QVBoxLayout;
+	mainLayout = new QVBoxLayout;
 	buttonLayout = new QHBoxLayout;
 
 	add = new QPushButton("Add");
@@ -70,37 +28,12 @@ GLBufferTab::GLBufferTab(QWidget* parent) : QWidget(parent)
 	table->setSelectionMode(QAbstractItemView::SingleSelection);
 	connect(table, &QTableWidget::doubleClicked, this, &GLBufferTab::TableDoubleClicked);
 	mainLayout->addWidget(table);
-	setLayout(mainLayout);*/
+	setLayout(mainLayout);
 }
 
 GLBufferTab::~GLBufferTab()
 {
-	delete add;
-	delete remove;
-	delete buttonLayout;
-	//delete table;
-	delete mainLayout;
-}
-
-void GLBufferTab::BufferSelected(const QItemSelection& selection)
-{
-	if(selection.indexes().isEmpty())
-	{
-		//nothing selected
-		//unselect if white space is clicked in list
-	}
-	else
-	{
-		//texturePreview->setPixmap(QPixmap(QPixmap::fromImage(GLSettings::TextureList.at(selection.indexes().first().row())->Image())));
-	}
-}
-
-void GLBufferTab::ListEditEnd(QWidget *editor, QAbstractItemDelegate::EndEditHint)
-{
-	int id = listView->currentIndex().row();
-	QString s = reinterpret_cast<QLineEdit*>(editor)->text();	//new name
-	bufferStringList.replaceInStrings(bufferStringList.at(id), s);
-	GLSettings::BufferList.at(id)->bName = s;
+ 	delete mainLayout;
 }
 
 void GLBufferTab::Popup()
@@ -176,3 +109,4 @@ void GLBufferTab::RemoveBuffer()
 		}
 	}
 }
+

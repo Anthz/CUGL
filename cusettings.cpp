@@ -1,5 +1,7 @@
 #include "cusettings.h"
 
+std::vector<CUGLBuffer*> CUSettings::BufferList;
+
 //param > buffer
 //param - select from objects properties, buffers - order
 
@@ -27,10 +29,7 @@ CUSettings::CUSettings(QWidget* parent) : QWidget(parent)
 
 CUSettings::~CUSettings()
 {
-	delete tabs;
-	delete settingsLayout;
-	delete settingsGroup;
-	delete mainLayout;
+ 	delete mainLayout;
 }
 
 void CUSettings::CUInit()
@@ -49,7 +48,6 @@ void CUSettings::CUInit()
 		printf("Device %i: %s", d.handle, d.name);
 	}
 
-	//change current device in cugeneral + save/load
 	cudaSetDevice(0);
 }
 

@@ -42,7 +42,8 @@ private:
 	QDialogButtonBox* buttons;
 	QStandardItemModel* bufferBoxModel;
 	std::vector<QStandardItem*> itemList;
-	std::vector<CUGLBuffer*> buffers;
+
+	std::vector<int> bufferIDs;
 
 	bool append;
 	Object *appObj;

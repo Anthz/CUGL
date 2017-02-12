@@ -81,7 +81,7 @@ ObjectPopup::ObjectPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 
 ObjectPopup::ObjectPopup(QWidget* parent, Object *o) : ObjectPopup(parent)
 {
-	append = true;
+	/*append = true;
 	appObj = o;
 
 	nameBox->setText(o->name);
@@ -101,32 +101,12 @@ ObjectPopup::ObjectPopup(QWidget* parent, Object *o) : ObjectPopup(parent)
 		}
 	}
 
-	fboBox->setCurrentIndex((o->FBO() != 0) ? fboBox->findText(QString::number(o->FBO())) : 0);
+	fboBox->setCurrentIndex((o->FBO() != 0) ? fboBox->findText(QString::number(o->FBO())) : 0);*/
 }
 
 ObjectPopup::~ObjectPopup()
 {
-	delete nameLabel;
-	delete instancesLabel;
-	delete bufferLabel;
-	delete textureLabel;
-	delete shaderLabel;
-	delete fboLabel;
-	delete nameBox;
-	delete instancesBox;
-
-	for each (QStandardItem *i in itemList)
-	{
-		delete i;
-	}
-
-	delete bufferBoxModel;
-	delete bufferBox;
-	delete textureBox;
-	delete shaderBox;
-	delete fboBox;
-	delete buttons;
-	delete mainLayout;
+ 	delete mainLayout;
 }
 
 bool ObjectPopup::Validation()
@@ -143,7 +123,7 @@ bool ObjectPopup::Validation()
 		nameBox->setStyleSheet("");
 	}
 
-	if(buffers.empty())
+	if(bufferIDs.empty())
 	{
 		bufferBox->setStyleSheet("border: 2px solid red");
 		result = false;
@@ -166,11 +146,11 @@ void ObjectPopup::BuffersChanged(const QModelIndex& topLeft, const QModelIndex& 
 	{
 		std::cout << "Unchecked!" << std::endl;
 
-		for(int i = 0; i < buffers.size(); ++i)
+		for(int i = 0; i < bufferIDs.size(); ++i)
 		{
-			if(buffers.at(i)->bName == item->text())
+			if(bufferIDs.at(i) == item->row())
 			{
-				buffers.erase(buffers.begin() + i);
+				bufferIDs.erase(bufferIDs.begin() + i);
 				--i;
 			}
 		}
@@ -178,7 +158,7 @@ void ObjectPopup::BuffersChanged(const QModelIndex& topLeft, const QModelIndex& 
 	else if(item->checkState() == Qt::Checked)
 	{
 		std::cout << "Checked!" << std::endl;
-		for each(CUGLBuffer* b in GLSettings::BufferList)
+		/*for each(CUGLBuffer* b in GLSettings::BufferList)
 		{
 			if(b->bName == item->text())
 			{
@@ -193,7 +173,8 @@ void ObjectPopup::BuffersChanged(const QModelIndex& topLeft, const QModelIndex& 
 				if(!dupe)
 					buffers.push_back(b);
 			}
-		}
+		}*/
+		bufferIDs.push_back(item->row());
 	}
 }
 
@@ -204,27 +185,26 @@ void ObjectPopup::Save()
 		QString name = nameBox->text();
 		int instances = instancesBox->value();
 
-		Texture *tex = nullptr;
-		if(textureBox->currentIndex() != 0)
-			tex = GLSettings::TextureList.at(textureBox->currentIndex() - 1);			
+		int texID = textureBox->currentIndex() - 1;
 
 		if(!append)
 		{
-			Object* o = new Object(name, instances, buffers, tex, GLWidget::ShaderList.at(shaderBox->currentIndex()));
+			//change buffers to bufIDs
+			Object* o = new Object(name, instances, &bufferIDs, texID, shaderBox->currentIndex());
 			if(fboBox->currentIndex() != 0)
-				o->FBO(GLWidget::FBOList.at(fboBox->currentIndex() - 1));
+				o->FBO(GLWidget::FBOList.at(fboBox->currentIndex() - 1));	//move to constructor
 			GLSettings::ObjectList.push_back(o);
 			static_cast<ObjectTab*>(parent())->AddToTable(o);
 		}
 		else
 		{
-			appObj->name = name;
+			/*appObj->name = name;
 			appObj->instances = instances;
 			appObj->buffers = buffers;
 			appObj->texture = tex;
 			appObj->shader = GLWidget::ShaderList.at(shaderBox->currentIndex());
 			if(fboBox->currentIndex() != 0)
-				appObj->FBO(GLWidget::FBOList.at(fboBox->currentIndex() - 1));
+				appObj->FBO(GLWidget::FBOList.at(fboBox->currentIndex() - 1));*/
 		}
 
 		close();

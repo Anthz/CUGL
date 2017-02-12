@@ -4,8 +4,20 @@ float CUTimer::ElapsedTime()
 {
 	float ms = 0;
 	cudaEventElapsedTime(&ms, start, stop);
-	Logger::Log("Kernel Time: " + std::to_string(ms) + "ms");
+	Logger::BasicLog("Kernel Time: " + std::to_string(ms) + "ms", filePath);
 	return ms;
+}
+
+double Timer::ElapsedTime()
+{
+	double ms = elapsedTime = (t2.QuadPart - t1.QuadPart) * 1000.0 / frequency.QuadPart;
+	Logger::BasicLog(std::to_string(ms), filePath);
+	return ms;
+}
+
+Timer::~Timer()
+{
+
 }
 
 namespace Logger
@@ -84,4 +96,22 @@ namespace Logger
 			printf(msg.c_str());
 		}
 	}
+
+	//no init required
+	//seperate file location (FULL e.g. path+name+extension)
+	//no fancy formatting
+	void BasicLog(const std::string &msg, std::string fullFilePath)
+	{
+		std::size_t found = fullFilePath.find_last_of("/\\");
+		if(CreateDirectoryA(fullFilePath.substr(0, found).c_str(), NULL) || ERROR_ALREADY_EXISTS == GetLastError())
+		{
+			fileStream.open(fullFilePath, std::ofstream::out | std::ofstream::app);
+			if(fileStream.is_open())
+			{
+				fileStream << msg << "\n";
+				fileStream.close();
+			}
+		}
+	}
 }
+

@@ -23,6 +23,12 @@ public:
 	explicit GLSettings(QWidget* parent = 0);
 	~GLSettings();
 
+	void AddTexture(Texture *texList);
+	void AddBuffer(CUGLBuffer *bufList);
+	void AddObject(Object *objList);
+	void AddTextures(std::vector<Texture*> *texList);
+	void AddBuffers(std::vector<CUGLBuffer*> *bufList);
+	void AddObjects(std::vector<Object*> *objList);
 	virtual QSize minimumSizeHint() const override;
 	virtual QSize sizeHint() const override;
 
@@ -34,6 +40,11 @@ private:
 	QVBoxLayout *mainLayout, *settingsLayout;
 	QGroupBox* settingsGroup;
 	QTabWidget* tabs;
+	GLGeneralTab *genTab;
+	ObjectTab *objTab;
+	GLBufferTab *bufTab;
+	TextureTab *texTab;
+	//move control to bottom bar
 
 signals:
 

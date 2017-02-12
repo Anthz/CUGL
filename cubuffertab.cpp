@@ -47,6 +47,7 @@ CUBufferTab::CUBufferTab(QWidget* parent) : QWidget(parent)
 
 CUBufferTab::~CUBufferTab()
 {
+	delete mainLayout;
 }
 
 void CUBufferTab::Update()
@@ -68,9 +69,7 @@ void CUBufferTab::Update()
 
 void CUBufferTab::BufferChanged(int i)
 {
-	if(i == -1)
-		int j = 10;
-	else
+	if(i != -1)
 	{
 		activateBox->setChecked(GLSettings::BufferList.at(i)->Cuda());
 		paramIDBox->setValue(GLSettings::BufferList.at(i)->ParamID());
@@ -81,6 +80,7 @@ void CUBufferTab::ActivatedChanged(int i)
 {
 	CUGLBuffer *b = GLSettings::BufferList.at(bufferBox->currentIndex());
 	b->Cuda((i == 0) ? false : true);
+	CUSettings::BufferList.push_back(b);
 }
 
 void CUBufferTab::ParamIDChanged(int i)

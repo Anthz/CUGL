@@ -1,41 +1,13 @@
 #include "bufferpopup.h"
 #include "glsettings.h"
 
-#pragma region Shapes
-float quad[] = 
-{
-	-0.5f, -0.5f, 0.0f,
-	-0.5f, 0.5f, 0.0f,
-	0.5f, 0.5f, 0.0f,
-	0.5f, 0.5f, 0.0f,
-	0.5f, -0.5f, 0.0f,
-	-0.5f, -0.5f, 0.0f
-};
-
-float quadUV[] =
-{
-	0.0f, 1.0f,
-	0.0f, 0.0f,
-	1.0f, 0.0f,
-	1.0f, 0.0f,
-	1.0f, 1.0f,
-	0.0f, 1.0f
-};
-
-GLfloat triangle[] =
-{
-	-1.0f, -1.0f, 0.0f,
-	0.0f, 1.0f, 0.0f,
-	1.0f, -1.0f, 0.0f,
-};
-#pragma endregion Shapes
-
 BufferPopup::BufferPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint | Qt::WindowCloseButtonHint)
 {
 	append = false;
 	//Object detail popup
 	//setup layouts/widgets
 	mainLayout = new QGridLayout;
+	checkboxLayout = new QHBoxLayout;
 
 	nameLabel = new QLabel("Name/ID:");
 	targetLabel = new QLabel("Target:");
@@ -46,12 +18,14 @@ BufferPopup::BufferPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 	attribCapacityLabel = new QLabel("Attribute Capacity:");
 	typeLabel = new QLabel("Type:");
 	normalisedLabel = new QLabel("Normalised:");
+	perInstanceLabel = new QLabel("Per Instance:");
 
 	nameBox = new QLineEdit;
 	//SIGNAL/SLOT if there's parameters
 
 	targetBox = new QComboBox;
 	targetBox->addItem("GL_ARRAY_BUFFER");
+	targetBox->addItem("GL_ELEMENT_ARRAY_BUFFER");
 	targetBox->addItem("GL_PIXEL_UNPACK_BUFFER");
 	targetBox->connect(targetBox, SIGNAL(currentIndexChanged(int)), this, SLOT(TargetChanged(int)));
 
@@ -63,7 +37,10 @@ BufferPopup::BufferPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 	dataPickerBox = new QComboBox;
 	dataPickerBox->addItem("Custom");
 	dataPickerBox->addItem("Screen Aligned Quad Vertices");
-	dataPickerBox->addItem("Screen Aligned Quad UV");
+	dataPickerBox->addItem("Screen Aligned Quad UVs");
+	dataPickerBox->addItem("Cube Vertices");
+	dataPickerBox->addItem("Cube UVs");
+	dataPickerBox->addItem("Cube Indices");
 	dataPickerBox->connect(dataPickerBox, SIGNAL(currentIndexChanged(int)), this, SLOT(DataChanged(int)));
 
 	dataBox = new QLineEdit;
@@ -74,6 +51,7 @@ BufferPopup::BufferPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 	{
 		textureBox->addItem(GLSettings::TextureList.at(i)->Name());
 	}
+	textureBox->connect(textureBox, SIGNAL(currentIndexChanged(int)), this, SLOT(TextureChanged(int)));
 	textureBox->hide();
 
 	usageBox = new QComboBox;
@@ -101,6 +79,12 @@ BufferPopup::BufferPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 	typeBox->addItem("GL_UNSIGNED_BYTE");
 
 	normalisedBox = new QCheckBox;
+	perInstanceBox = new QCheckBox;
+
+	checkboxLayout->addWidget(normalisedLabel);
+	checkboxLayout->addWidget(normalisedBox);
+	checkboxLayout->addWidget(perInstanceLabel);
+	checkboxLayout->addWidget(perInstanceBox);
 
 	buttons = new QDialogButtonBox(QDialogButtonBox::Save | QDialogButtonBox::Cancel);
 	connect(buttons, SIGNAL(accepted()), this, SLOT(Save()));
@@ -124,8 +108,7 @@ BufferPopup::BufferPopup(QWidget* parent) : QDialog(parent, Qt::WindowTitleHint 
 	mainLayout->addWidget(attribCapacityBox, 7, 1);
 	mainLayout->addWidget(typeLabel, 8, 0);
 	mainLayout->addWidget(typeBox, 8, 1);
-	mainLayout->addWidget(normalisedLabel, 9, 0);
-	mainLayout->addWidget(normalisedBox, 9, 1);
+	mainLayout->addLayout(checkboxLayout, 9, 0, 1, 2);
 	mainLayout->addWidget(buttons, 10, 1);
 
 	setLayout(mainLayout);
@@ -150,13 +133,28 @@ BufferPopup::BufferPopup(QWidget* parent, CUGLBuffer *b) : BufferPopup(parent)
 		dataPickerBox->setCurrentIndex(2);
 		DisableBufferBoxes(true);
 	}
+	else if(b->bName == "Cube Vertices")
+	{
+		dataPickerBox->setCurrentIndex(3);
+		DisableBufferBoxes(true);
+	}
+	else if(b->bName == "Cube UVs")
+	{
+		dataPickerBox->setCurrentIndex(4);
+		DisableBufferBoxes(true);
+	}
+	else if(b->bName == "Cube Indices")
+	{
+		dataPickerBox->setCurrentIndex(5);
+		DisableBufferBoxes(true);
+	}
 	else
 	{
 		dataPickerBox->setCurrentIndex(0);
 		dataBox->setText(b->bDataPath);
 		DisableBufferBoxes(false);
 	}
-	
+
 	usageBox->setCurrentIndex(usageBox->findText(b->bUsage.second));
 	attribNameBox->setText(b->aID.first);
 	attribCapacityBox->setValue(b->aSize);
@@ -166,30 +164,6 @@ BufferPopup::BufferPopup(QWidget* parent, CUGLBuffer *b) : BufferPopup(parent)
 
 BufferPopup::~BufferPopup()
 {
-	delete nameLabel;
-	delete targetLabel;
-	delete capacityLabel;
-	delete dataLabel;
-	delete usageLabel;
-	delete attribNameLabel;
-	delete attribCapacityLabel;
-	delete typeLabel;
-	delete normalisedLabel;
-
-	delete nameBox;
-	delete dataPickerBox;
-	delete dataBox;
-	delete textureBox;
-	delete attribNameBox;
-	delete capacityBox;
-	delete attribCapacityBox;
-	delete targetBox;
-	delete usageBox;
-	delete typeBox;
-	delete normalisedBox;
-
-	delete buttons;
-
 	delete mainLayout;
 }
 
@@ -206,18 +180,18 @@ bool BufferPopup::Validation()
 	{
 		nameBox->setStyleSheet("");
 	}
-	
+
 	//set bool for correct custom load
 	//if not empty, check for successful load
 	//if blank, set data as 0
 	/*if(dataBox->text().isEmpty())	//or if file fails to load
 	{
-		dataBox->setStyleSheet("border: 2px solid red");
-		result = false;
+	dataBox->setStyleSheet("border: 2px solid red");
+	result = false;
 	}
 	else
 	{
-		dataBox->setStyleSheet("");
+	dataBox->setStyleSheet("");
 	}*/
 
 	if(attribNameBox->text().isEmpty())	//if string, check returned id
@@ -258,75 +232,43 @@ void BufferPopup::TargetChanged(int i)
 {
 	switch(i)
 	{
-		case 0:
-		{
-			dataLabel->setText("Data:");
-			dataPickerBox->show();
-			dataBox->show();
+	case 0:
+	case 1:
+	{
+		dataLabel->setText("Data:");
+		dataPickerBox->show();
+		dataBox->show();
 
-			capacityLabel->show();
-			capacityBox->show();
+		capacityLabel->show();
+		capacityBox->show();
+		capacityBox->setValue(0);
 
-			textureBox->hide();
-			break;
-		}
-		case 1:
-		{
-			dataLabel->setText("Texture:");
-			dataPickerBox->hide();
-			dataBox->hide();
+		textureBox->hide();
+		break;
+	}
+	case 2:
+	{
+		dataLabel->setText("Texture:");
+		dataPickerBox->hide();
+		dataBox->hide();
 
-			capacityLabel->hide();
-			capacityBox->hide();
+		capacityLabel->hide();
+		capacityBox->hide();
 
-			textureBox->show();
-			break;
-		}
+		textureBox->show();
+		textureBox->setCurrentIndex(-1);
+		textureBox->setCurrentIndex(0);
+		break;
+	}
 	}
 }
 
-void BufferPopup::SetTarget()
+void BufferPopup::TextureChanged(int i)
 {
-	switch(targetBox->currentIndex())
-	{
-		case 0:
-		{
-			target.first = GL_ARRAY_BUFFER;
-			break;
-		}
-		case 1:
-		{
-			target.first = GL_PIXEL_UNPACK_BUFFER;
-			break;
-		}
-	}
-
-	target.second = targetBox->currentText();
-}
-
-void BufferPopup::SetData()
-{
-	if(targetBox->currentIndex() == 0)
-	{
-		switch(dataPickerBox->currentIndex())
-		{
-			case 1:
-			{
-				data = quad;
-				break;
-			}
-			case 2:
-			{
-				data = quadUV;
-				break;
-			}
-		}
-	}
-	else
+	if(i != -1)
 	{
 		Texture *t = GLSettings::TextureList.at(textureBox->currentIndex());
-		capacityBox->setValue(t->ImageSize().width() * t->ImageSize().height() * 4);
-		data = nullptr;//(void*)t->Data();
+		capacityBox->setValue(t->ImageSize().width() * t->ImageSize().height() * t->FormatCount());
 	}
 }
 
@@ -334,43 +276,85 @@ void BufferPopup::DataChanged(int i)
 {
 	switch(i)
 	{
-		case 0:
-			nameBox->setText("");
-			capacityBox->setValue(1);
-			attribNameBox->setText("");
-			attribCapacityBox->setValue(0);
+	case 0:
+		nameBox->setText("");
+		capacityBox->setValue(1);
+		attribNameBox->setText("");
+		attribCapacityBox->setValue(0);
 
-			DisableBufferBoxes(false);
-			CustomDataClicked();
-			break;
-		case 1:
-			//SAQ Verts
-			nameBox->setText("Screen Aligned Quad Vertices");
-			capacityBox->setValue(18);
-			targetBox->setCurrentIndex(0);
-			dataBox->setText("");
-			usageBox->setCurrentIndex(0);
-			attribNameBox->setText("aPos");
-			attribCapacityBox->setValue(3);
-			typeBox->setCurrentIndex(0);
-			normalisedBox->setChecked(false);
+		DisableBufferBoxes(false);
+		CustomDataClicked();
+		break;
+	case 1:
+		//SAQ Verts
+		nameBox->setText("Screen Aligned Quad Vertices");
+		targetBox->setCurrentIndex(0);
+		capacityBox->setValue(18);
+		dataBox->setText("");
+		usageBox->setCurrentIndex(0);
+		attribNameBox->setText("aPos");
+		attribCapacityBox->setValue(3);
+		typeBox->setCurrentIndex(0);
+		normalisedBox->setChecked(false);
 
-			DisableBufferBoxes(true);
-			break;
-		case 2:
-			//SAQ UVs
-			nameBox->setText("Screen Aligned Quad UVs");
-			capacityBox->setValue(12);
-			targetBox->setCurrentIndex(0);
-			dataBox->setText("");
-			usageBox->setCurrentIndex(0);
-			attribNameBox->setText("aUV");
-			attribCapacityBox->setValue(2);
-			typeBox->setCurrentIndex(0);
-			normalisedBox->setChecked(false);
+		DisableBufferBoxes(true);
+		break;
+	case 2:
+		//SAQ UVs
+		nameBox->setText("Screen Aligned Quad UVs");
+		targetBox->setCurrentIndex(0);
+		capacityBox->setValue(12);
+		dataBox->setText("");
+		usageBox->setCurrentIndex(0);
+		attribNameBox->setText("aUV");
+		attribCapacityBox->setValue(2);
+		typeBox->setCurrentIndex(0);
+		normalisedBox->setChecked(false);
 
-			DisableBufferBoxes(true);
-			break;
+		DisableBufferBoxes(true);
+		break;
+	case 3:
+		//Cube
+		nameBox->setText("Cube Vertices");
+		targetBox->setCurrentIndex(0);
+		capacityBox->setValue(108);
+		dataBox->setText("");
+		usageBox->setCurrentIndex(0);
+		attribNameBox->setText("aPos");
+		attribCapacityBox->setValue(3);
+		typeBox->setCurrentIndex(0);
+		normalisedBox->setChecked(false);
+
+		DisableBufferBoxes(true);
+		break;
+	case 4:
+		//Cube
+		nameBox->setText("Cube UVs");
+		targetBox->setCurrentIndex(0);
+		capacityBox->setValue(72);
+		dataBox->setText("");
+		usageBox->setCurrentIndex(0);
+		attribNameBox->setText("aUV");
+		attribCapacityBox->setValue(2);
+		typeBox->setCurrentIndex(0);
+		normalisedBox->setChecked(false);
+
+		DisableBufferBoxes(true);
+		break;
+	case 5:
+		//Cube
+		nameBox->setText("Cube Indices");
+		targetBox->setCurrentIndex(1);
+		capacityBox->setValue(36);
+		dataBox->setText("");
+		usageBox->setCurrentIndex(0);
+		attribNameBox->setText("aIndex");
+		attribCapacityBox->setValue(1);
+		typeBox->setCurrentIndex(6);
+		normalisedBox->setChecked(false);
+
+		DisableBufferBoxes(true);
+		break;
 	}
 }
 
@@ -379,7 +363,7 @@ void BufferPopup::CustomDataClicked()
 	QString s;
 	QString title = "Open Data File";
 	QString filter = "";
-		
+
 	s = QFileDialog::getOpenFileName(this, title, QDir::currentPath(), filter);
 	if(s.size() == 0)
 		return; //cancelled
@@ -388,108 +372,35 @@ void BufferPopup::CustomDataClicked()
 	dataBox->setCursorPosition(s.size());
 }
 
-void BufferPopup::SetUsage()
-{
-	switch(usageBox->currentIndex())
-	{
-		case 0:
-			usage.first = GL_DYNAMIC_DRAW;
-			break;
-		case 1:
-			usage.first = GL_DYNAMIC_COPY;
-			break;
-		case 2:
-			usage.first = GL_STATIC_DRAW;
-			break;
-		case 3:
-			usage.first = GL_STATIC_COPY;
-			break;
-	}
-
-	usage.second = usageBox->currentText();
-}
-
-void BufferPopup::SetType()
-{
-	GLenum typeEnum;
-	QString typeString = typeBox->currentText();
-	int size;
-
-	switch(typeBox->currentIndex())
-	{
-		case 0:
-			typeEnum = GL_FLOAT;
-			size = sizeof(float);
-			break;
-		case 1:
-			typeEnum = GL_HALF_FLOAT;
-			size = sizeof(float) / 2;
-			break;
-		case 2:
-			typeEnum = GL_DOUBLE;
-			size = sizeof(double);
-			break;
-		case 3:
-			typeEnum = GL_INT;
-			size = sizeof(int);
-			break;
-		case 4:
-			typeEnum = GL_UNSIGNED_INT;
-			size = sizeof(unsigned int);
-			break;
-		case 5:
-			typeEnum = GL_SHORT;
-			size = sizeof(short);
-			break;
-		case 6:
-			typeEnum = GL_UNSIGNED_SHORT;
-			size = sizeof(unsigned short);
-			break;
-		case 7:
-			typeEnum = GL_BYTE;
-			size = sizeof(byte);
-			break;
-		case 8:
-			typeEnum = GL_UNSIGNED_BYTE;
-			size = sizeof(byte);
-			break;
-	}
-
-	type = std::make_tuple(typeEnum, typeString, size);
-}
-
 void BufferPopup::Save()
 {
 	if(Validation())
 	{
-		SetTarget();
-		SetData();
-		SetUsage();
-		SetType();
-
 		QString name = nameBox->text();
+		QString target = targetBox->currentText();
+		QString dataType = dataPickerBox->currentText();
 		int capacity = capacityBox->value();
-		QString dataPath = dataBox->text();
-		std::pair<QString, int> aID(attribNameBox->text(), -1);
+		QString dataPath = (targetBox->currentIndex() == 2) ? QString::number(textureBox->currentIndex()) : dataBox->text();
+		QString usage = usageBox->currentText();
+		QString aID = attribNameBox->text();
 		int aCapacity = attribCapacityBox->value();
+		QString type = typeBox->currentText();
 		bool norm = normalisedBox->isChecked();
+		bool perInstance = perInstanceBox->isChecked();
 
 		if(!append)
 		{
 			CUGLBuffer* b;
+			b = new CUGLBuffer(name, capacity, target, dataType, dataPath, usage, aID, aCapacity, type, norm, perInstance);
 
-			if(dataPickerBox->isVisible() && dataPickerBox->currentIndex() == 0)
-				b = new CUGLBuffer(name, capacity, target, dataPath, usage, aID, aCapacity, type, norm);
-			else
-				b = new CUGLBuffer(name, capacity, target, data, usage, aID, aCapacity, type, norm);
-			if(targetBox->currentIndex() == 1)
+			if(targetBox->currentIndex() == 2)
 				GLSettings::TextureList.at(textureBox->currentIndex())->PBO(b->bufID);
 			GLSettings::BufferList.push_back(b);
 			static_cast<GLBufferTab*>(parent())->AddToTable(b);
 		}
 		else
 		{
-			appBuf->bName = name;
+			/*appBuf->bName = name;
 			appBuf->bCap = capacity;
 			appBuf->bTarget = target;
 			if(dataPath != "")
@@ -500,7 +411,7 @@ void BufferPopup::Save()
 			appBuf->aID = aID;
 			appBuf->aSize = aCapacity;
 			appBuf->bType = type;
-			appBuf->norm = norm;
+			appBuf->norm = norm;*/
 		}
 
 		close();

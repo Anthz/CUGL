@@ -12,9 +12,8 @@
 #include <QEvent>
 
 #include "colourtextbox.h"
-#include "serializable.h"
 
-class CUGeneralTab : public QWidget//, public Serializable
+class CUGeneralTab : public QWidget
 {
 	Q_OBJECT
 

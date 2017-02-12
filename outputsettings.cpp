@@ -15,9 +15,7 @@ OutputSettings::OutputSettings(QWidget* parent) : QWidget(parent)
 
 OutputSettings::~OutputSettings()
 {
-	delete settingsLayout;
-	delete settingsGroup;
-	delete mainLayout;
+ 	delete mainLayout;
 }
 
 QSize OutputSettings::minimumSizeHint() const

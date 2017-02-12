@@ -40,6 +40,8 @@ public:
 	static void VSync(bool b);
 	static void MSAA(bool b);
 	static void Play(bool b);
+	static void StepForward();
+	static void StepBackward();
 	static QMatrix4x4 *ProjMatrix();
 	static QMatrix4x4 *ViewMatrix();
 	static void CheckFBOStatus();
@@ -60,7 +62,7 @@ private:
 	QTime timer;
 	int width, height;
 	QOpenGLFunctions_3_3_Core* glFuncs;
-	bool play;
+	bool play, step, paramWarning;
 
 signals:
 
@@ -70,6 +72,8 @@ public slots:
 	// QWidget interface
 protected:
 	void keyPressEvent(QKeyEvent*);
+	virtual void mousePressEvent(QMouseEvent *e) override;
+
 };
 
 #endif // GLWIDGET_H

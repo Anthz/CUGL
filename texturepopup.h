@@ -29,32 +29,28 @@ public:
 private:
 	void CustomDataClicked();
 	bool Validation();
-	void SetTarget();
-	void SetMinMagFilter();
-	void SetWrapMode();
+	void UpdateFormatBox(QImage::Format fmt);
+	QImage::Format GetFormat();
 
 	QWidget* parentWidget;
 	QGridLayout* mainLayout;
 	QLabel *nameLabel, *targetLabel,
 		*dataLabel, *widthLabel,
 		*heightLabel, *depthLabel,
-		*minMagLabel, *wrapLabel,
-		*fboLabel;
+		*formatLabel, *minMagLabel,
+		*wrapLabel, *fboLabel;
 
 	QLineEdit *nameBox, *dataBox;
 	QSpinBox *widthBox, *heightBox, *depthBox;
-	QComboBox *targetBox, *minMagBox, *wrapBox;
+	QComboBox *targetBox, *formatBox, *minMagBox, *wrapBox;
 	QCheckBox *fboBox;
 	QDialogButtonBox* buttons;
-
-	QImage img;
-	std::pair<GLenum, QString> target;
-	std::pair<GLenum, QString> minMagFilter, wrapMode;
+	QString target, minMagFilter, wrapMode, path;
 
 	bool append;
 	Texture *appBuf;
 
-private slots:
+	private slots:
 	bool eventFilter(QObject* object, QEvent* event);
 	void TargetChanged(int i);
 	void Save();

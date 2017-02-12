@@ -106,21 +106,7 @@ GLGeneralTab::GLGeneralTab(QWidget* parent) : QWidget(parent)
 
 GLGeneralTab::~GLGeneralTab()
 {
-	delete mainLayout;
-	delete widthLabel;
-	delete heightLabel;
-	delete drawLabel;
-	delete colourLabel;
-	delete vsyncLabel;
-	delete msaaLabel;
-	delete fovLabel;
-	delete widthBox;
-	delete heightBox;
-	delete fovBox;
-	delete drawBox;
-	delete colourBox;
-	delete vsyncBox;
-	delete msaaBox;
+ 	delete mainLayout;
 }
 
 void GLGeneralTab::WidthChanged(int i)

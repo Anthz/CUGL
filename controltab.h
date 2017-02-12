@@ -19,10 +19,13 @@ private:
 
 signals:
 
-	public slots :
+public slots :
 
-		private slots :
-		void PlayClicked();
+private slots :
+	void PlayClicked();
+	void StepForward();
+	void StepBackward();
+	
 };
 
 #endif // CONTROLSTAB_H

@@ -24,19 +24,19 @@ Shader::Shader(QString name, QString vertPath, QString fragPath)
 {
 	this->name = name;
 
-	bool result;
+	bool result, result2, result3;
 	program = new QOpenGLShaderProgram();
 	result = program->addShaderFromSourceFile(QOpenGLShader::Vertex, vertPath);
 	if(!result)
 		Logger::Log(program->log().toStdString());
-	result = program->addShaderFromSourceFile(QOpenGLShader::Fragment, fragPath);
-	if(!result)
+	result2 = program->addShaderFromSourceFile(QOpenGLShader::Fragment, fragPath);
+	if(!result2)
 		Logger::Log(program->log().toStdString());
 	//result = program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
 	//result = program->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
-	result = program->link();
+	result3 = program->link();
 
-	if(!result)
+	if(!result || !result2 || !result3)	//fix
 	{
 		qWarning() << "Shader could not be initialised";
 		exit(1);

@@ -29,6 +29,8 @@ public:
 	virtual QSize minimumSizeHint() const override;
 	virtual QSize sizeHint() const override;
 
+	static std::vector<CUGLBuffer*> BufferList;
+
 	std::vector<Device> deviceList;
 
 private:
@@ -42,10 +44,10 @@ private:
 
 signals:
 
-public slots :
+	public slots :
 
-private slots :
-	void TabChanged(int i);
+		private slots :
+		void TabChanged(int i);
 };
 
 #endif // CUSETTINGS_H
